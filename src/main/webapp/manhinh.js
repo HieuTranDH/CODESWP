@@ -2,6 +2,7 @@ const seatMap = document.getElementById('seat-map');
 const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']; // Hàng ghế từ A đến I
 const seatsPerRow = 10; // Số ghế mỗi hàng
 
+//huy was here
 // Tạo ghế cho mỗi hàng
 rows.forEach(rowLetter => {
     const seatRow = document.createElement('div');
