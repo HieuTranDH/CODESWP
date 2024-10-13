@@ -48,7 +48,7 @@
 
                                             <div class="col-md-6">
                                                 <div class="position-relative form-group">
-                                                    <label for="examplePassword" class><span class="text-danger">*</span> Password</label>
+                                                    <label for="examplePassword" class><span class="text-danger">*</span> Enter Password</label>
                                                     <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" onkeyup="showPasswordHint()" required>
                                                     <div id="passwordHint" style="color: #666; font-size: 14px; margin-top: 5px;"></div>
                                                 </div>
