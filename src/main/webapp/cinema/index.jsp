@@ -44,8 +44,8 @@
 
 
         .date-selector button.selected {
-            background-color: red; /* Đổi màu nền thành đỏ */
-            color: white; /* Đổi màu chữ thành trắng (tùy chọn) */
+            background-color: red; 
+            color: white; 
         }
         .date-selector button:hover {
             background-color: blue;
@@ -192,7 +192,7 @@
 
                             <div class="movie-info">
                                 <h1>${movie.title}</h1>
-                                <span class="rating">G</span> <!-- Thay thế bằng giá trị rating -->
+                                <span class="rating">G</span> 
                                 <span class="duration">${movie.duration} phút</span>
                                 <p>${movie.description}</p>
                                 <ul style="display: block;">
@@ -206,13 +206,12 @@
                             </div>
                         </div>
                         <div class="cinema-showtimes">
-                            <!-- Hiển thị suất chiếu của từng bộ phim -->
                             <c:forEach var="cinema" items="${cinemas}">
-                                <h2 style="color: white;">${cinema.name}</h2> <!-- Hiển thị tên rạp -->
+                                <h2 style="color: white;">${cinema.name}</h2> 
                                 <div class="showtimes">
                                     <c:forEach var="screeningRoom" items="${cinema.screeningRooms}">
                                         <c:forEach var="showtime" items="${screeningRoom.showtimes}">
-                                            <c:if test="${showtime.movie.movieId == movie.movieId}"> <!-- Kiểm tra bộ phim -->
+                                            <c:if test="${showtime.movie.movieId == movie.movieId}"> 
                                                 <div class="cinema-showtime" data-showtime="${showtime.startTime}">
                                                     <div class="showtime-selector">
                                                         <div class="showtime">
@@ -224,7 +223,7 @@
                                                                        login?value=login
                                                                    </c:otherwise>
                                                                </c:choose>" style="color: inherit;text-decoration: none;">
-                                                                <span>${showtime.startTime}</span> <!-- Hiển thị thời gian chiếu -->
+                                                                <span>${showtime.startTime}</span>
                                                             </a>
                                                         </div>
                                                     </div>
@@ -246,7 +245,7 @@
             const dateSelector = document.getElementById('dateSelector');
             const cinemaMovieContainer = document.getElementById('cinemaMovie');
 
-            const today = new Date(); // Lấy thời gian hiện tại theo múi giờ hệ thống
+            const today = new Date();
             console.log("Ngày hiện tại (GMT +7): ", today.toLocaleDateString('vi-VN'));
 
             function formatDate(date) {
