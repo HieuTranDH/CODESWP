@@ -52,13 +52,15 @@ public class Staff_DB implements DBinfo {
                     int cinemaId = rs.getInt("cinema_id");
                     String name = rs.getString("name");
                     String hireDate = rs.getString("hire_date");
+                     String disableDate = rs.getString("disabled_date");
                     String staffEmail = rs.getString("email");
                     String phoneNumber = rs.getString("phone_number");
                     String password = rs.getString("password");
                     String role = rs.getString("role");
+                    String status = rs.getString("status");
 
                     // Tạo đối tượng Staff
-                    staff = new Staff(staffId, name, staffEmail, phoneNumber, password, role, hireDate, cinemaId);
+                    staff = new Staff(staffId, name, staffEmail, phoneNumber, password, role, hireDate,disableDate, cinemaId,status);
                 }
             }
         } catch (SQLException ex) {
@@ -118,7 +120,7 @@ public class Staff_DB implements DBinfo {
 
     public static List<Staff> getAllStaffWithCinema() {
     List<Staff> staffList = new ArrayList<>();
-    String query = "SELECT s.staff_id, s.cinema_id, s.name AS staff_name, s.hire_date, s.email AS staff_email, "
+    String query = "SELECT s.staff_id, s.cinema_id, s.name AS staff_name, s.hire_date, s.disabled_date ,s.status ,s.email AS staff_email, "
             + "s.phone_number AS staff_phone, s.password, s.role, "
             + "c.name AS cinema_name, c.address AS cinema_address, c.phone_number AS cinema_phone, c.email AS cinema_email, "
             + "c.status AS cinema_status " // Thêm dấu phẩy ở đây
@@ -133,11 +135,12 @@ public class Staff_DB implements DBinfo {
                 int cinemaId = rs.getInt("cinema_id");
                 String staffName = rs.getString("staff_name");
                 String hireDate = rs.getString("hire_date");
+                String disableDate = rs.getString("disabled_date");
                 String staffEmail = rs.getString("staff_email");
                 String staffPhone = rs.getString("staff_phone");
                 String password = rs.getString("password");
                 String role = rs.getString("role");
-
+                String status = rs.getString("status");
                 // Cinema details
                 String cinemaName = rs.getString("cinema_name");
                 String cinemaAddress = rs.getString("cinema_address");
@@ -149,7 +152,7 @@ public class Staff_DB implements DBinfo {
                 Cinema cinema = new Cinema(cinemaId, cinemaName, cinemaAddress, cinemaPhone, cinemaEmail, cinemaStatus);
 
                 // Tạo đối tượng Staff và thêm vào danh sách
-                Staff staff = new Staff(staffId, staffName, staffEmail, staffPhone, password, role, hireDate, cinema);
+                Staff staff = new Staff(staffId, staffName, staffEmail, staffPhone, password, role, hireDate,disableDate, cinema, status);
                 staffList.add(staff);
             }
         }
@@ -183,23 +186,58 @@ public class Staff_DB implements DBinfo {
         return isAdded;
     }
 
-    public static boolean updateStaff(Staff staff) {
+  public static boolean updateStaff(Staff staff) {
+    boolean isUpdated = false;
+    String query = "UPDATE Staff SET email = ?, phone_number = ?, cinema_id = ?, status = ?, "
+                 + "hire_date = CASE WHEN ? = 'Active' THEN GETDATE() ELSE hire_date END, "
+                 + "disabled_date = CASE WHEN ? = 'Cancel' THEN GETDATE() WHEN ? = 'Active' THEN NULL ELSE disabled_date END "
+                 + "WHERE staff_id = ?";
+
+    try (Connection con = DriverManager.getConnection(dbURL, dbUser, dbPass); 
+         PreparedStatement pstmt = con.prepareStatement(query)) {
+
+        pstmt.setString(1, staff.getEmail());
+        pstmt.setString(2, staff.getPhoneNumber()); // Phone number is optional
+
+        // Nếu cinemaId == 0 thì set NULL vào database, ngược lại set giá trị cinemaId
+        if (staff.getCinemaId() == 0) {
+            pstmt.setNull(3, java.sql.Types.INTEGER);
+        } else {
+            pstmt.setInt(3, staff.getCinemaId());
+        }
+
+        pstmt.setString(4, staff.getStatus()); // Set status
+        
+        // Truyền status để quyết định cập nhật hire_date hoặc disabled_date
+        pstmt.setString(5, staff.getStatus()); // For hire_date
+        pstmt.setString(6, staff.getStatus()); // For disabled_date khi Cancel
+        pstmt.setString(7, staff.getStatus()); // For disabled_date khi Active
+
+        pstmt.setInt(8, staff.getStaffId()); // Assuming you have a getStaffId method in your Staff class
+
+        int rowsAffected = pstmt.executeUpdate();
+        if (rowsAffected > 0) {
+            isUpdated = true; // Staff successfully updated
+        }
+    } catch (SQLException ex) {
+        Logger.getLogger(Staff_DB.class.getName()).log(Level.SEVERE, null, ex);
+    }
+
+    return isUpdated;
+}
+    public static boolean updateStaffInfo(Staff staff) {
         boolean isUpdated = false;
-        String query = "UPDATE Staff SET email = ?, phone_number = ?, cinema_id = ? WHERE staff_id = ?";
+        String query = "UPDATE Staff SET name = ?, phone_number = ? WHERE staff_id = ?";
 
         try (Connection con = DriverManager.getConnection(dbURL, dbUser, dbPass); PreparedStatement pstmt = con.prepareStatement(query)) {
 
-            pstmt.setString(1, staff.getEmail());
+            pstmt.setString(1, staff.getName());
             pstmt.setString(2, staff.getPhoneNumber()); // Assuming phone number is optional
 
             // Nếu cinemaId == 0 thì set NULL vào database, ngược lại set giá trị cinemaId
-            if (staff.getCinemaId() == 0) {
-                pstmt.setNull(3, java.sql.Types.INTEGER);
-            } else {
-                pstmt.setInt(3, staff.getCinemaId());
-            }
+           
 
-            pstmt.setInt(4, staff.getStaffId()); // Assuming you have a getStaffId method in your Staff class
+            pstmt.setInt(3, staff.getStaffId()); // Assuming you have a getStaffId method in your Staff class
 
             int rowsAffected = pstmt.executeUpdate();
             if (rowsAffected > 0) {
@@ -211,7 +249,25 @@ public class Staff_DB implements DBinfo {
 
         return isUpdated;
     }
+public static boolean cancelStaff(int staffId) {
+    boolean isCancelled = false;
+    String query = "UPDATE Staff SET status = 'cancel' WHERE staff_id = ?";
 
+    try (Connection con = DriverManager.getConnection(dbURL, dbUser, dbPass); 
+         PreparedStatement pstmt = con.prepareStatement(query)) {
+
+        pstmt.setInt(1, staffId); // Sử dụng ID nhân viên
+
+        int rowsAffected = pstmt.executeUpdate();
+        if (rowsAffected > 0) {
+            isCancelled = true; // Nhân viên đã được cập nhật trạng thái thành công
+        }
+    } catch (SQLException ex) {
+        Logger.getLogger(Staff_DB.class.getName()).log(Level.SEVERE, null, ex);
+    }
+
+    return isCancelled;
+}
     public static Staff getStaffById(int staffId) {
         Staff staff = null;
         String query = "SELECT * FROM Staff WHERE staff_id = ?";

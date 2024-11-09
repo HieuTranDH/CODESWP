@@ -77,43 +77,92 @@ public class Staff_dashboard extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         HttpSession session = request.getSession();
-        Staff currentStaff = (Staff) session.getAttribute("Staff");
+        Staff currentStaff = null;
+        Staff currentAdmin = null;
 
-        if (currentStaff != null) {
+// Kiểm tra xem session có chứa Staff hay Admin
+        if (session.getAttribute("Staff") != null) {
+            currentStaff = (Staff) session.getAttribute("Staff");
+        } else if (session.getAttribute("Admin") != null) {
+            currentAdmin = (Staff) session.getAttribute("Admin");
+        }
+
+        if (currentStaff != null || currentAdmin != null) {
             String action = request.getParameter("action");
 
             try {
+                String message1 = ""; // Khai báo trước để tránh NullPointerException
+
                 switch (action) {
-                    case "updateProfile":
-//                        updateCustomerInfo(request, currentUser);
+                    case "updateInfo":
+                        int id = Integer.parseInt(request.getParameter("id"));
+                        String name = request.getParameter("name");
+                        String phoneNumber = request.getParameter("phoneNumber");
+
+                        // Cập nhật thông tin cho Admin
+                        if (currentAdmin != null) {
+                            message1 = updateStaffInfo(currentAdmin.getStaffId(), name, phoneNumber); // Giả sử updateStaffInfo dùng cho cả Admin
+                            session.setAttribute("msg", message1);
+
+                            // Cập nhật lại session Admin
+                            Staff updatedAdmin = Staff_DB.getStaffById(currentAdmin.getStaffId());
+                            if (updatedAdmin != null) {
+                                session.setAttribute("Admin", updatedAdmin);
+                            } else {
+                                request.setAttribute("msg", "Không tìm thấy thông tin Admin.");
+                            }
+
+                            response.sendRedirect(request.getHeader("Referer")); // Chuyển hướng về trang hiện tại
+                            return;
+                        } else if (currentStaff != null) {
+                            // Cập nhật thông tin cho Staff
+                            message1 = updateStaffInfo(currentStaff.getStaffId(), name, phoneNumber);
+                            session.setAttribute("msg", message1);
+
+                            // Cập nhật lại session Staff
+                            Staff updatedUser = Staff_DB.getStaffById(currentStaff.getStaffId());
+                            if (updatedUser != null) {
+                                session.setAttribute("Staff", updatedUser);
+                            } else {
+                                request.setAttribute("msg", "Không tìm thấy thông tin nhân viên.");
+                            }
+
+                            response.sendRedirect(request.getHeader("Referer")); // Chuyển hướng về trang hiện tại
+                            return; // Dừng thực thi tại đây
+                        }
                         break;
+
                     case "updateAvatar":
-//                        updateAvatar(request, currentUser);
+                        // updateAvatar(request, currentUser);
                         break;
+
                     case "changePassword":
-                        String message = changePassword(request);
-                        session.setAttribute("toastMessage", message);
+                        String message2 = changePassword(request);
+                        session.setAttribute("msg", message2);
                         break;
+
                     default:
-                        session.setAttribute("toastMessage", "Hành động không hợp lệ.");
+                        session.setAttribute("msg", "Hành động không hợp lệ.");
                         break;
                 }
-                // Cập nhật lại session
-                Staff updatedUser = Staff_DB.getStaffByEmail(currentStaff.getEmail());
-                session.setAttribute("Staff", updatedUser);
+
+                // Nếu không redirect trong case "updateInfo", sẽ chuyển hướng về trang dashboard
                 response.sendRedirect(request.getContextPath() + "/staff/dashboard");
             } catch (Exception e) {
-                session.setAttribute("toastMessage", "Có lỗi xảy ra: " + e.getMessage());
+                session.setAttribute("msg", "Có lỗi xảy ra: " + e.getMessage());
                 e.printStackTrace();
                 response.sendRedirect(request.getContextPath() + "/staff/dashboard");
+            } finally {
+                // Thêm khối finally nếu cần thiết để làm sạch tài nguyên hoặc xử lý khác
             }
-        } else {
-            session.setAttribute("toastMessage", "Vui lòng đăng nhập.");
-            response.sendRedirect(request.getContextPath() + "/login");
-        }
 
+            if (currentAdmin == null && currentStaff == null) {
+                session.setAttribute("msg", "Vui lòng đăng nhập.");
+                response.sendRedirect(request.getContextPath() + "/login");
+
+            }
+        }
     }
 
     private String changePassword(HttpServletRequest request) {
@@ -156,6 +205,22 @@ public class Staff_dashboard extends HttpServlet {
             e.printStackTrace();
             session.setAttribute("msg", "Đã xảy ra lỗi khi đổi mật khẩu.");
             return "Đã xảy ra lỗi khi đổi mật khẩu.";
+        }
+    }
+
+    private String updateStaffInfo(int id, String name, String phoneNumber) {
+        // Lấy thông tin hiện tại của nhân viên
+        Staff currentStaff = Staff_DB.getStaffById(id);
+
+        if (currentStaff != null) {
+            currentStaff.setName(name);
+            currentStaff.setPhoneNumber(phoneNumber);
+
+            // Gọi đến phương thức trong Staff_DB để thực hiện cập nhật
+            boolean updateSuccess = Staff_DB.updateStaffInfo(currentStaff);
+            return updateSuccess ? "Cập nhật thông tin Success." : "Cập nhật thông tin thất bại.";
+        } else {
+            return "Nhân viên không tồn tại.";
         }
     }
 

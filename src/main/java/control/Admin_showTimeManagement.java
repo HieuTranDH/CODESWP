@@ -4,6 +4,10 @@
  */
 package control;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import jakarta.servlet.annotation.WebServlet;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,6 +17,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.io.BufferedReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -95,12 +100,19 @@ public class Admin_showTimeManagement extends HttpServlet {
     @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
+      request.setCharacterEncoding("UTF-8");
     String action = request.getParameter("action"); // Lấy tham số action từ request
 
     switch (action) {
         case "createShowtime":
             createShowtime(request, response);
             break;
+        case "addShowtimeDefault":
+            addShowtimeDefault(request, response);
+            break;
+        case "deleteShowtime":
+            deleteShowtime(request, response);
+            break;     
         case "updateShowtime":
             updateShowtime(request, response);
             break;
@@ -232,6 +244,117 @@ List<Showtime> existingEndtimes = db.getShowtimesByRoomAndDate(roomId, endDateTi
     }
      response.sendRedirect(request.getContextPath() + "/staff/showTimeManagement");
 }
+private void deleteShowtime(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    // Lấy tham số showtimeId từ request
+    int showtimeId = Integer.parseInt(request.getParameter("showtimeId"));
+
+    // Tạo đối tượng của lớp DAO để tương tác với cơ sở dữ liệu
+    ScreeningRoom_DB showtimeDAO = new ScreeningRoom_DB();
+
+    // Xóa suất chiếu dựa trên showtimeId
+    boolean isDeleted = showtimeDAO.deleteShowtime(showtimeId);
+
+    // Kiểm tra kết quả của việc xóa và chuyển hướng hoặc thông báo cho người dùng
+    if (isDeleted) {
+        // Nếu xóa thành công, chuyển hướng về trang quản lý suất chiếu với thông báo thành công
+        request.getSession().setAttribute("msg", "Xóa suất chiếu  Success!");
+        response.sendRedirect(request.getContextPath() + "/staff/showTimeManagement");
+    } else {
+        // Nếu xóa không thành công, hiển thị thông báo lỗi
+        request.getSession().setAttribute("msg", "Xóa suất chiếu thất bại!");
+        response.sendRedirect(request.getContextPath() + "/staff/showTimeManagement");
+    }
+}
+private void addShowtimeDefault(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    // Thiết lập mã hóa cho request và response
+    response.setContentType("application/json;charset=UTF-8");
+    request.setCharacterEncoding("UTF-8");
+
+    // Đọc dữ liệu JSON từ request
+    BufferedReader reader = request.getReader();
+    StringBuilder jsonBuilder = new StringBuilder();
+    String line;
+    while ((line = reader.readLine()) != null) {
+        jsonBuilder.append(line);
+    }
+    String jsonData = jsonBuilder.toString();
+
+    // Chuyển đổi chuỗi JSON thành đối tượng JSON
+    Gson gson = new Gson();
+    JsonObject jsonObject = gson.fromJson(jsonData, JsonObject.class);
+
+    // Lấy các giá trị từ đối tượng JSON
+    int movieId = jsonObject.get("movieId").getAsInt();
+    String startTime = jsonObject.get("startTime").getAsString();
+    String endTime = jsonObject.get("endTime").getAsString();
+    JsonArray selectedDays = jsonObject.getAsJsonArray("selectedDays");
+    JsonArray selectedRooms = jsonObject.getAsJsonArray("selectedRooms");
+
+    ScreeningRoom_DB db = new ScreeningRoom_DB();
+    boolean success = true;
+    StringBuilder conflictMessage = new StringBuilder();
+
+    // Lặp qua các ngày và phòng chiếu
+    for (JsonElement dayElement : selectedDays) {
+        String selectedDate = dayElement.getAsString();
+        for (JsonElement roomElement : selectedRooms) {
+            int roomId = roomElement.getAsInt();
+
+            // Lấy danh sách suất chiếu hiện có
+            List<Showtime> existingShowtimes = db.getShowtimesByRoomAndDate(roomId, selectedDate);
+            boolean hasConflict = false;
+
+            // Kiểm tra xung đột với các suất chiếu hiện có
+            for (Showtime existingShowtime : existingShowtimes) {
+                String existingStartTime = existingShowtime.getStartTime();
+                String existingEndTime = existingShowtime.getEndTime();
+
+                // Kiểm tra xung đột thời gian
+                if (isOverlapping(selectedDate + " " + startTime, selectedDate + " " + endTime, existingStartTime, existingEndTime) ||
+                    isWithinFifteenMinutes2(existingEndTime ,selectedDate + " "+startTime)) {
+                    hasConflict = true;
+                    conflictMessage.append("Xung đột showtime cho phòng " + roomId + " vào ngày " + selectedDate + ".\n");
+                    success = false;
+                    break;
+                }
+            }
+
+            if (!hasConflict) {
+                // Thêm suất chiếu mới nếu không có xung đột
+                Showtime newShowtime = new Showtime();
+                newShowtime.setMovieId(movieId);
+                newShowtime.setRoomId(roomId);
+                newShowtime.setStartTime(selectedDate + " " + startTime);
+                newShowtime.setEndTime(selectedDate + " " + endTime);
+
+                boolean isSuccess = db.addShowTime(newShowtime);
+                if (!isSuccess) {
+                    conflictMessage.append("Thêm showtime thất bại cho phòng " + roomId + " vào ngày " + selectedDate + ".\n");
+                    success = false;
+                }
+            }
+        }
+    }
+
+     // Tạo phản hồi JSON
+    JsonObject jsonResponse = new JsonObject();
+    if (success) {
+        jsonResponse.addProperty("message", "Thêm tất cả showtime Success!");
+        jsonResponse.addProperty("success", true);
+        jsonResponse.addProperty("redirectUrl", request.getContextPath() + "/staff/showTimeManagement");
+    } else {
+        jsonResponse.addProperty("message", conflictMessage.toString());
+        jsonResponse.addProperty("success", false);
+        jsonResponse.addProperty("redirectUrl", request.getContextPath() + "/staff/showTimeManagement");
+    }
+
+// Gửi phản hồi về client
+PrintWriter out = response.getWriter();
+out.write(gson.toJson(jsonResponse));
+System.out.println("JSON Response: " + gson.toJson(jsonResponse));// Chuyển đổi đối tượng JSON thành chuỗi và gửi đi
+out.flush();
+}
 private boolean isOverlapping(String start1, String end1, String start2, String end2) {
     // Suất chiếu bị trùng khi:
     // - Suất 1 bắt đầu trước khi suất 2 kết thúc và kết thúc sau khi suất 2 bắt đầu
@@ -248,7 +371,23 @@ private boolean isWithinFifteenMinutes(String endTime, String startTime) {
         Date start = sdf.parse(startTime);
         
         long differenceInMinutes = (start.getTime() - end.getTime()) / (60 * 1000);
-        return differenceInMinutes < 15;
+        return differenceInMinutes < 15 && differenceInMinutes > 0;
+    } catch (ParseException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
+private boolean isWithinFifteenMinutes2(String endTime, String startTime) {
+    try {
+       
+        // Định dạng cho ngày và giờ
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        
+        Date end = sdf.parse(endTime);
+        Date start = sdf.parse(startTime);
+        
+        long differenceInMinutes = (start.getTime() - end.getTime()) / (60 * 1000);
+        return differenceInMinutes < 15 && differenceInMinutes > 0;
     } catch (ParseException e) {
         e.printStackTrace();
         return false;

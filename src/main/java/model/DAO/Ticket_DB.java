@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.CinemaAnalytic;
 import model.Ticket;
 import static model.DAO.DBinfo.*;
 
@@ -238,6 +239,120 @@ public class Ticket_DB {
         }
 
         return isDeleted; // Trả về true nếu xóa thành công, ngược lại false
+    }
+
+    public static ArrayList<CinemaAnalytic> getCinemaAnalytics() {
+        String query = "SELECT c.cinema_id, c.name AS cinema_name, "
+                + "COUNT(t.ticket_id) AS total_tickets, "
+                + "SUM(t.price) AS total_revenue "
+                + "FROM Cinema c "
+                + "JOIN ScreeningRoom sr ON c.cinema_id = sr.cinema_id "
+                + "JOIN Showtime st ON sr.room_id = st.room_id "
+                + "JOIN Ticket t ON st.showtime_id = t.showtime_id "
+                + "GROUP BY c.cinema_id, c.name "
+                + "ORDER BY total_tickets DESC, total_revenue DESC";
+
+        ArrayList<CinemaAnalytic> cinemaAnalytics = new ArrayList<>(); // Sử dụng ArrayList
+
+        try (Connection con = DriverManager.getConnection(dbURL, dbUser, dbPass); PreparedStatement pstmt = con.prepareStatement(query); ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                int cinemaId = rs.getInt("cinema_id");
+                String cinemaName = rs.getString("cinema_name");
+                int totalTickets = rs.getInt("total_tickets");
+                double totalRevenue = rs.getDouble("total_revenue");
+
+                // Tạo một đối tượng CinemaAnalytic mới và thêm vào danh sách
+                CinemaAnalytic analytics = new CinemaAnalytic(cinemaId, cinemaName, totalTickets, totalRevenue);
+                cinemaAnalytics.add(analytics);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Ticket_DB.class.getName()).log(Level.SEVERE, "Error retrieving cinema analytics", ex);
+        }
+
+        return cinemaAnalytics; // Trả về danh sách CinemaAnalytic
+    }
+
+    public static List<CinemaAnalytic> getCinemaAnalyticsForYear(int year) {
+        String query = "SELECT c.cinema_id, c.name AS cinema_name, "
+                + "COUNT(t.ticket_id) AS total_tickets, "
+                + "SUM(t.price) AS total_revenue "
+                + "FROM Cinema c "
+                + "JOIN ScreeningRoom sr ON c.cinema_id = sr.cinema_id "
+                + "JOIN Showtime st ON sr.room_id = st.room_id "
+                + "JOIN Ticket t ON st.showtime_id = t.showtime_id "
+                + "WHERE YEAR(t.purchase_date) = ? "
+                + "GROUP BY c.cinema_id, c.name "
+                + "ORDER BY total_tickets DESC, total_revenue DESC";
+
+        ArrayList<CinemaAnalytic> cinemaAnalytics = new ArrayList<>();
+
+        try (Connection con = DriverManager.getConnection(dbURL, dbUser, dbPass); PreparedStatement pstmt = con.prepareStatement(query)) {
+
+            pstmt.setInt(1, year); // Thiết lập tham số cho năm
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    int cinemaId = rs.getInt("cinema_id");
+                    String cinemaName = rs.getString("cinema_name");
+                    int totalTickets = rs.getInt("total_tickets");
+                    double totalRevenue = rs.getDouble("total_revenue");
+
+                    // Tạo đối tượng CinemaAnalytic và thêm vào danh sách
+                    CinemaAnalytic analytics = new CinemaAnalytic(cinemaId, cinemaName, totalTickets, totalRevenue);
+                    cinemaAnalytics.add(analytics);
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Ticket_DB.class.getName()).log(Level.SEVERE, "Error retrieving cinema analytics for year " + year, ex);
+        }
+
+        return cinemaAnalytics; // Trả về danh sách CinemaAnalytic
+    }
+
+    public static List<CinemaAnalytic> getCinemaAnalyticsForNovember(int month, int year) {
+        String query = "SELECT c.cinema_id, c.name AS cinema_name, "
+                + "COUNT(t.ticket_id) AS total_tickets, "
+                + "SUM(t.price) AS total_revenue "
+                + "FROM Cinema c "
+                + "JOIN ScreeningRoom sr ON c.cinema_id = sr.cinema_id "
+                + "JOIN Showtime st ON sr.room_id = st.room_id "
+                + "JOIN Ticket t ON st.showtime_id = t.showtime_id "
+                + "WHERE MONTH(t.purchase_date) = ? AND YEAR(t.purchase_date) = ? "
+                + "GROUP BY c.cinema_id, c.name "
+                + "ORDER BY total_tickets DESC, total_revenue DESC";
+
+        ArrayList<CinemaAnalytic> cinemaAnalytics = new ArrayList<>();
+
+        try (Connection con = DriverManager.getConnection(dbURL, dbUser, dbPass); PreparedStatement pstmt = con.prepareStatement(query)) {
+
+            pstmt.setInt(1, month); // Thiết lập tham số cho tháng
+            pstmt.setInt(2, year);  // Thiết lập tham số cho năm
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    int cinemaId = rs.getInt("cinema_id");
+                    String cinemaName = rs.getString("cinema_name");
+                    int totalTickets = rs.getInt("total_tickets");
+                    double totalRevenue = rs.getDouble("total_revenue");
+
+                    // Tạo đối tượng CinemaAnalytic và thêm vào danh sách
+                    CinemaAnalytic analytics = new CinemaAnalytic(cinemaId, cinemaName, totalTickets, totalRevenue);
+                    cinemaAnalytics.add(analytics);
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Ticket_DB.class.getName()).log(Level.SEVERE, "Error retrieving cinema analytics for November " + year, ex);
+        }
+
+        return cinemaAnalytics; // Trả về danh sách CinemaAnalytic
+    }
+
+    public static void main(String[] args) {
+        ArrayList<CinemaAnalytic> analytics = Ticket_DB.getCinemaAnalytics();
+        for (CinemaAnalytic c : analytics) {
+            System.out.println(c);
+        }
     }
 
 }

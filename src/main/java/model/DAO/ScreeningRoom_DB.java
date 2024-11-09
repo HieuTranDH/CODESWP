@@ -121,7 +121,21 @@ public class ScreeningRoom_DB implements DBinfo {
             return false; // Trả về false nếu có lỗi xảy ra
         }
     }
+    public boolean deleteShowtime(int showtimeId) {
+    String sql = "DELETE FROM Showtime WHERE showtime_id = ?";
 
+    try (Connection con = DriverManager.getConnection(dbURL, dbUser, dbPass);
+         PreparedStatement stmt = con.prepareStatement(sql)) {
+
+        stmt.setInt(1, showtimeId);
+
+        int rowsAffected = stmt.executeUpdate();
+        return rowsAffected > 0; // Trả về true nếu xóa thành công
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false; // Trả về false nếu có lỗi xảy ra
+    }
+}
     public boolean updateShowtime(Showtime showtime) {
         String sql = "UPDATE Showtime SET movie_id = ?, room_id = ?, start_time = ?, end_time = ? WHERE showtime_id = ?";
 
@@ -173,7 +187,8 @@ public class ScreeningRoom_DB implements DBinfo {
 
         return showtimes; // Trả về danh sách showtimes
     }
- public static ArrayList<ScreeningRoom> getAllScreeningRoomByCinemaId(int cinemaId) {
+
+    public static ArrayList<ScreeningRoom> getAllScreeningRoomByCinemaId(int cinemaId) {
         ArrayList<ScreeningRoom> screeningRooms = new ArrayList<>();
         String query = "SELECT * FROM ScreeningRoom WHERE cinema_id = ?";
 
@@ -254,5 +269,55 @@ public class ScreeningRoom_DB implements DBinfo {
         }
         return room;
     }
+
+    // Method to get the screening room with the largest seat capacity for a specific cinema
+    public static ScreeningRoom getScreeningRoomWithMaxSeats(int cinemaId) {
+        String query = "SELECT TOP 1 * FROM ScreeningRoom WHERE cinema_id = ? ORDER BY seat_capacity DESC"; // Lấy phòng chiếu có số ghế lớn nhất trong rạp cụ thể
+        ScreeningRoom room = null;
+
+        try (Connection con = DriverManager.getConnection(dbURL, dbUser, dbPass); PreparedStatement pstmt = con.prepareStatement(query)) {
+            pstmt.setInt(1, cinemaId); // Gán giá trị cinemaId vào câu truy vấn
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    room = new ScreeningRoom();
+                    room.setRoomId(rs.getInt("room_id"));
+                    room.setCinemaId(rs.getInt("cinema_id"));
+                    room.setRoomName(rs.getString("room_name"));
+                    room.setSeatCapacity(rs.getInt("seat_capacity"));
+                }
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(ScreeningRoom_DB.class.getName()).log(Level.SEVERE, null, e);
+        }
+        return room;
+    }
+
+    public static ScreeningRoom getScreeningRoom(int cinemaId, String roomName, int seatCapacity) {
+        ScreeningRoom room = null;
+        String query = "SELECT * FROM ScreeningRoom WHERE cinema_id = ? AND room_name = ? AND seat_capacity = ?";
+
+        try (Connection con = DriverManager.getConnection(dbURL, dbUser, dbPass); PreparedStatement pstmt = con.prepareStatement(query)) {
+
+            pstmt.setInt(1, cinemaId);
+            pstmt.setString(2, roomName);
+            pstmt.setInt(3, seatCapacity);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    room = new ScreeningRoom();
+                    room.setRoomId(rs.getInt("room_id"));
+                    room.setCinemaId(rs.getInt("cinema_id"));
+                    room.setRoomName(rs.getString("room_name"));
+                    room.setSeatCapacity(rs.getInt("seat_capacity"));
+                }
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(ScreeningRoom_DB.class.getName()).log(Level.SEVERE, null, e);
+        }
+
+        return room;
+    }
+
 
 }

@@ -115,6 +115,7 @@ public class Customer_login extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        HttpSession session = request.getSession();
         String identifier = request.getParameter("identify");
         String password = request.getParameter("password");
         String rememberMe = request.getParameter("rememberMe");
@@ -127,11 +128,18 @@ public class Customer_login extends HttpServlet {
         // Kiểm tra xem email có tồn tại trong bảng Staff hay không
         if (staffDB.checkStaffByEmail(identifier)) {
             Staff staff = staffDB.getStaffByEmail(identifier);
+
+            if ("Cancel".equals(staff.getStatus())) {
+                msg = "Nhân viên này đã bị vô hiệu hóa.";
+                session.setAttribute("message", msg);
+                request.getRequestDispatcher("/auth/login.jsp").forward(request, response);
+                return;
+            }
             String storedPassword = staff.getPassword();
 
             if (storedPassword.startsWith("$2a$") || storedPassword.startsWith("$2b$") || storedPassword.startsWith("$2y$")) {
                 if (BCrypt.checkpw(password, storedPassword)) {
-                    HttpSession session = request.getSession();
+
                     String role = staff.getRole();
                     if (role.equalsIgnoreCase("Staff")) {
                         session.setAttribute("Staff", staff);
@@ -151,13 +159,13 @@ public class Customer_login extends HttpServlet {
 
                 } else {
                     msg = "Mật khẩu không đúng.";
-                    request.setAttribute("message", msg);
+                    session.setAttribute("message", msg);
                     request.getRequestDispatcher("/auth/login.jsp").forward(request, response);
                     return;
                 }
             } else {
                 if (storedPassword.equals(password)) {
-                    HttpSession session = request.getSession();
+
                     String role = staff.getRole();
                     if (role.equalsIgnoreCase("Staff")) {
                         session.setAttribute("Staff", staff);
@@ -179,7 +187,7 @@ public class Customer_login extends HttpServlet {
 
                 } else {
                     msg = "Mật khẩu không đúng.";
-                    request.setAttribute("message", msg);
+                    session.setAttribute("message", msg);
                     response.sendRedirect(request.getContextPath() + "/login?value=login");
                     return;
                 }
@@ -188,7 +196,7 @@ public class Customer_login extends HttpServlet {
             Customer customer = customerDB.getCustomerByEmail(identifier);
             if (customer == null) {
                 msg = "Email không tồn tại.";
-                request.setAttribute("message", msg);
+                session.setAttribute("message", msg);
                 request.getRequestDispatcher("/auth/login.jsp").forward(request, response);
                 return;
             }
@@ -196,7 +204,7 @@ public class Customer_login extends HttpServlet {
             String storedPassword = customer.getPassword();
             if (storedPassword.startsWith("$2a$") || storedPassword.startsWith("$2b$") || storedPassword.startsWith("$2y$")) {
                 if (BCrypt.checkpw(password, storedPassword)) {
-                    HttpSession session = request.getSession();
+
                     session.setAttribute("USER", customer);
 
                     // Xử lý cookie nếu chọn "Remember me"
@@ -206,13 +214,13 @@ public class Customer_login extends HttpServlet {
                     return;
                 } else {
                     msg = "Mật khẩu không đúng.";
-                    request.setAttribute("message", msg);
+                    session.setAttribute("message", msg);
                     request.getRequestDispatcher("/auth/login.jsp").forward(request, response);
                     return;
                 }
             } else {
                 if (storedPassword.equals(password)) {
-                    HttpSession session = request.getSession();
+
                     session.setAttribute("USER", customer);
 
                     // Xử lý cookie nếu chọn "Remember me"
@@ -222,7 +230,7 @@ public class Customer_login extends HttpServlet {
                     return;
                 } else {
                     msg = "Mật khẩu không đúng.";
-                    request.setAttribute("message", msg);
+                    session.setAttribute("message", msg);
                     request.getRequestDispatcher("/auth/login.jsp").forward(request, response);
                     return;
                 }
@@ -270,5 +278,5 @@ public class Customer_login extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
+//alo adsakda
 }

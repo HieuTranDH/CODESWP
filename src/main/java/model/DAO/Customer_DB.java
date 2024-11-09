@@ -236,23 +236,36 @@ public class Customer_DB implements DBinfo {
 
         try (Connection con = DriverManager.getConnection(DBinfo.dbURL, DBinfo.dbUser, DBinfo.dbPass); PreparedStatement pstmt = con.prepareStatement(query)) {
 
+            // Gán tham số cho câu truy vấn
             pstmt.setString(1, "%" + keyword + "%");
             pstmt.setString(2, "%" + keyword + "%");
 
             ResultSet rs = pstmt.executeQuery();
+
+            // Lặp qua kết quả trả về
             while (rs.next()) {
                 Movie movie = new Movie();
+
+                // Gán giá trị cho các thuộc tính của movie từ kết quả truy vấn
                 movie.setMovieId(rs.getInt("movie_id"));
                 movie.setTitle(rs.getString("title"));
                 movie.setDuration(rs.getInt("duration"));
                 movie.setGenre(rs.getString("genre"));
                 movie.setReleaseDate(rs.getString("release_date"));
                 movie.setDescription(rs.getString("description"));
+                movie.setStatus(rs.getString("status"));
+                movie.setPoster(rs.getString("poster"));
+                movie.setAverageRating(rs.getDouble("average_rating"));
+
+                // Nếu có thêm danh sách ratings, bạn có thể cần một truy vấn khác để lấy dữ liệu ratings cho phim này
+                // movie.setRatings(fetchRatingsForMovie(movie.getMovieId()));
+                // Thêm đối tượng Movie vào danh sách
                 movies.add(movie);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return movies;
     }
 
