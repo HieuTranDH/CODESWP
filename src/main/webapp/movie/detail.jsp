@@ -16,7 +16,7 @@
             color: #ffc107;         /* Màu ch? cho tên ng??i dùng */
         }</style>
 
-    <!----filter-search-boxx---->
+    <!----filter-search-box---->
     <div class="movie-card-section">
         <div class="card">
             <!-- Nhúng video YouTube -->
@@ -31,7 +31,6 @@
 
             </div>
         </div>
-
     </div>
     <div class="comments-section">
         <h4>Comments:</h4>

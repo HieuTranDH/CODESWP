@@ -325,12 +325,6 @@
                                     </div>
                                 </c:if>
 
-                                <c:if test="${empty ticketList}">
-                                    <div class="alert alert-warning" role="alert">
-                                        Không có vé nào.
-                                    </div>
-                                </c:if>
-
                                 <c:if test="${not empty ticketList}">
                                     <c:forEach var="ticket" items="${ticketList}">
                                         <div class="col-md-4 mb-3">
@@ -370,10 +364,6 @@
                                 </c:if>
                             </div>
                         </div>
-
-
-
-
                     </div>
                 </div>
                 <%@include file="footer.jsp" %>
@@ -383,72 +373,72 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-   $(document).ready(function () {
-    $('#searchTicketId').on('keyup', function () {
-        var ticketId = $(this).val().trim();
-        console.log("Searching for Ticket ID:", ticketId);
+        $(document).ready(function () {
+            $('#searchTicketId').on('keyup', function () {
+                var ticketId = $(this).val().trim();
+                console.log("Searching for Ticket ID:", ticketId);
 
-        if (ticketId) {
-            $.ajax({
-                url: "${pageContext.request.contextPath}/staff/searchTicket",
-                type: "GET",
-                data: { ticketId: ticketId },
-                success: function (response) {
-                    console.log("Response from search:", response);
+                if (ticketId) {
+                    $.ajax({
+                        url: "${pageContext.request.contextPath}/staff/searchTicket",
+                        type: "GET",
+                        data: {ticketId: ticketId},
+                        success: function (response) {
+                            console.log("Response from search:", response);
 
-                    // Tạo HTML từ đối tượng JSON
-                    if (response.error) {
-                        // Hiển thị thông báo không tìm thấy vé
-                        $('#ticketListContainer').html('<div class="alert alert-warning">Không tìm thấy vé với mã vé: ' + ticketId + '</div>');
-                    } else {
-                        // Tạo HTML từ đối tượng JSON
-                        var html = '<div class="col-md-4 mb-3"><div class="card shadow-sm"><div class="card-body">';
-                        html += '<h5 class="card-title">Mã vé: ' + response.ticketId + '</h5>';
-                        html += '<p class="card-text">';
-                        html += '<strong>Tên khách hàng:</strong> ' + response.customerName + '<br>';
-                        html += '<strong>Phim:</strong> ' + response.movieTitle + '<br>';
-                        html += '<strong>Phòng chiếu:</strong> ' + response.screeningRoom + '<br>';
-                        html += '<strong>Số ghế:</strong> ' + response.seatNames.join(', ') + '<br>'; // Đã chỉnh sửa dòng này
-                        html += '<strong>Giá vé:</strong> ' + response.price + ' VND<br>';
-                        html += '<strong>Giờ chiếu:</strong> ' + response.showtimeStart + '<br>';
-                        html += '<strong>Trạng thái:</strong> ' + response.status + '</p>';
+                            // Tạo HTML từ đối tượng JSON
+                            if (response.error) {
+                                // Hiển thị thông báo không tìm thấy vé
+                                $('#ticketListContainer').html('<div class="alert alert-warning">Không tìm thấy vé với mã vé: ' + ticketId + '</div>');
+                            } else {
+                                // Tạo HTML từ đối tượng JSON
+                                var html = '<div class="col-md-4 mb-3"><div class="card shadow-sm"><div class="card-body">';
+                                html += '<h5 class="card-title">Mã vé: ' + response.ticketId + '</h5>';
+                                html += '<p class="card-text">';
+                                html += '<strong>Tên khách hàng:</strong> ' + response.customerName + '<br>';
+                                html += '<strong>Phim:</strong> ' + response.movieTitle + '<br>';
+                                html += '<strong>Phòng chiếu:</strong> ' + response.screeningRoom + '<br>';
+                                html += '<strong>Số ghế:</strong> ' + response.seatNames.join(', ') + '<br>'; // Đã chỉnh sửa dòng này
+                                html += '<strong>Giá vé:</strong> ' + response.price + ' VND<br>';
+                                html += '<strong>Giờ chiếu:</strong> ' + response.showtimeStart + '<br>';
+                                html += '<strong>Trạng thái:</strong> ' + response.status + '</p>';
 
-                        // Kiểm tra trạng thái vé để hiển thị nút Check-in
-                        if (response.status === 'CheckedIn') {
-                            html += '<button class="btn btn-secondary btn-block" disabled>Đã Check-in</button>';
-                        } else {
-                            html += '<form method="post" action="${pageContext.request.contextPath}/staff/ticketManagement">';
-                            html += '<input type="hidden" name="ticketId" value="' + response.ticketId + '">';
-                            html += '<button type="submit" class="btn btn-success btn-block">Check-in</button>';
-                            html += '</form>';
+                                // Kiểm tra trạng thái vé để hiển thị nút Check-in
+                                if (response.status === 'CheckedIn') {
+                                    html += '<button class="btn btn-secondary btn-block" disabled>Đã Check-in</button>';
+                                } else {
+                                    html += '<form method="post" action="${pageContext.request.contextPath}/staff/ticketManagement">';
+                                    html += '<input type="hidden" name="ticketId" value="' + response.ticketId + '">';
+                                    html += '<button type="submit" class="btn btn-success btn-block">Check-in</button>';
+                                    html += '</form>';
+                                }
+
+                                html += '</div></div></div>';
+
+                                // Cập nhật ticket list container với HTML mới
+                                $('#ticketListContainer').html(html);
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.error("Error during search:", textStatus, errorThrown);
                         }
-
-                        html += '</div></div></div>';
-
-                        // Cập nhật ticket list container với HTML mới
-                        $('#ticketListContainer').html(html);
-                    }
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    console.error("Error during search:", textStatus, errorThrown);
+                    });
+                } else {
+                    // Reload the original ticket list if search box is empty
+                    $.ajax({
+                        url: "${pageContext.request.contextPath}/staff/ticketManagement",
+                        type: "GET",
+                        success: function (response) {
+                            console.log("Response from ticket management:", response);
+                            $('#ticketListContainer').html(response);
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.error("Error while reloading ticket list:", textStatus, errorThrown);
+                        }
+                    });
                 }
             });
-        } else {
-            // Reload the original ticket list if search box is empty
-            $.ajax({
-                url: "${pageContext.request.contextPath}/staff/ticketManagement",
-                type: "GET",
-                success: function (response) {
-                    console.log("Response from ticket management:", response);
-                    $('#ticketListContainer').html(response);
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    console.error("Error while reloading ticket list:", textStatus, errorThrown);
-                }
-            });
-        }
-    });
-});
+        });
 
         document.addEventListener("DOMContentLoaded", function (event) {
             // Ensure your DOM is fully loaded before executing any code
@@ -463,7 +453,7 @@
                     button: "OK!"
                 });
                 // Xóa msg sau khi hi?n th? ?? tránh hi?n th? l?i khi t?i l?i trang
-        <% session.removeAttribute("msg"); %>
+        <% session.removeAttribute("msg");%>
             }
         });
 

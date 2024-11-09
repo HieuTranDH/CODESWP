@@ -98,4 +98,11 @@ public class ScreeningRoom {
     public List<Seat> getSeats() {
         return seats;
     }
+
+    @Override
+    public String toString() {
+        return "ScreeningRoom{" + "roomId=" + roomId + ", cinemaId=" + cinemaId + ", roomName=" + roomName + ", seatCapacity=" + seatCapacity + '}';
+    }
+    
+    
 }

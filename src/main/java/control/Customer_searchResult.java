@@ -7,22 +7,18 @@ package control;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
-import model.Cinema;
-import model.DAO.Cinema_DB;
-import model.DAO.Movie_DB;
+import java.util.ArrayList;
+import model.DAO.Customer_DB;
 import model.Movie;
 
 /**
  *
- * @author ThanhDuoc
+ * @author Admin
  */
-@WebServlet(name = "Movie_detail", urlPatterns = {"/detail"})
-public class Movie_detail extends HttpServlet {
+public class Customer_searchResult extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,10 +37,10 @@ public class Movie_detail extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Movie_detail</title>");
+            out.println("<title>Servlet Customer_searchResult</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet Movie_detail at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet Customer_searchResult at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -62,45 +58,21 @@ public class Movie_detail extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String movieIdStr = request.getParameter("movieId");
-        int movieId = Integer.parseInt(movieIdStr);
+        // Lấy từ khóa tìm kiếm từ request
+        String keyword = request.getParameter("query");
+        System.out.println("Search keyword: " + keyword);
 
-        Movie_DB mb = new Movie_DB();
-        Movie movie = mb.getMovieById(movieId);
+        // Tạo đối tượng từ Customer_DB để lấy danh sách phim
+        Customer_DB customerDB = new Customer_DB();
 
-        // Đặt thông tin của phim vào thuộc tính của request
-        request.setAttribute("movie", movie);
+        // Tìm kiếm phim dựa trên từ khóa
+        ArrayList<Movie> movies = customerDB.searchMovies(keyword);
 
-        // Lấy ngày từ request (nếu có)
-        String selectedDateStr = request.getParameter("selectedDate");
+        // Kiểm tra kết quả và thêm vào request attributes
+        request.setAttribute("movies", movies);  // Đặt danh sách movies vào request để truy cập từ JSP
 
-        // Nếu không có ngày được chọn, sử dụng ngày hiện tại
-        java.util.Date selectedDate;
-        if (selectedDateStr == null || selectedDateStr.isEmpty()) {
-            selectedDate = new java.util.Date(); // Ngày hiện tại
-        } else {
-            try {
-                // Chuyển chuỗi thành java.util.Date
-                java.text.SimpleDateFormat formatter = new java.text.SimpleDateFormat("yyyy-MM-dd");
-                selectedDate = formatter.parse(selectedDateStr);
-            } catch (java.text.ParseException e) {
-                selectedDate = new java.util.Date(); // Nếu có lỗi khi parse, dùng ngày hiện tại
-            }
-        }
-
-        // Gọi hàm để lấy danh sách rạp chiếu với suất chiếu
-        Cinema_DB cdb = new Cinema_DB();
-        List<Cinema> cinemaList = cdb.getAllCinemasWithShowtimes();
-
-        // Gọi hàm để lấy danh sách các bộ phim đang có suất chiếu theo ngày đã chọn
-        List<Movie> currentlyShowingMovies = cdb.getMoviesCurrentlyShowing(selectedDate);
-
-        // Đặt danh sách này vào request attribute để chuyển cho trang JSP
-        request.setAttribute("cinemas", cinemaList);
-        request.setAttribute("currentlyShowingMovies", currentlyShowingMovies); // Danh sách phim đang chiếu theo ngày
-        request.setAttribute("selectedDate", selectedDate); // Đặt ngày đã chọn để sử dụng trong JSP
-        // Chuyển tiếp đến trang detail.jsp
-        request.getRequestDispatcher("/movie/detail.jsp").forward(request, response);
+        // Chuyển hướng đến trang searchresult.jsp
+        request.getRequestDispatcher("/searchresult.jsp").forward(request, response);
     }
 
     /**

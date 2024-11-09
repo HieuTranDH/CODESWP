@@ -14,16 +14,31 @@
             // Check if the message variable is set or not
             document.addEventListener("DOMContentLoaded", (event) => {
                 var errorMessage = "${message}";
-                if (errorMessage != "") {
+
+                if (errorMessage) {
+                    let title, icon;
+
+                    if (errorMessage === "Add Success." || errorMessage === "Edit Success.") {
+                        title = "Success!";
+                        icon = "success";
+                    } else if (errorMessage === "Room name already exists." || errorMessage === "Add Fail." || errorMessage === "Edit Fail.") {
+                        title = "Error!";
+                        icon = "error";
+                    } else {
+                        title = "Notice!";
+                        icon = "info";
+                    }
+
                     swal({
-                        title: "Success!",
+                        title: title,
                         text: errorMessage,
-                        icon: "success",
+                        icon: icon,
                         button: "OK!",
                     });
                 }
             });
         </script>
+
         <div class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar">
             <%@include file="header.jsp" %> 
             <div class="ui-theme-settings">
@@ -381,8 +396,7 @@
 
                                 <!-- Seat Capacity -->
                                 <div class="form-group">
-                                    <label for="SeatCapacityInput${screen.roomId}">Seat Capacity:</label>
-                                    <input type="number" class="form-control mb-2 rounded" id="SeatCapacityInput${screen.roomId}" name="seatCapacity" value="${screen.seatCapacity}" min="0" readonly>
+                                    <input type="number" class="form-control mb-2 rounded" id="SeatCapacityInput${screen.roomId}" name="seatCapacity" value="${screen.seatCapacity}" min="0" hidden>
                                 </div>
 
                                 <!-- Cinema ID (Hidden) -->
@@ -421,8 +435,7 @@
 
                             <!-- Seat Capacity -->
                             <div class="form-group">
-                                <label for="SeatCapacityInput">Seat Capacity:</label>
-                                <input type="number" class="form-control mb-2 rounded" id="SeatCapacityInput" name="seatCapacity" placeholder="Enter Seat Capacity" value="0" min="0" readonly>
+                                <input type="number" class="form-control mb-2 rounded" id="SeatCapacityInput" name="seatCapacity" placeholder="Enter Seat Capacity" value="0" min="0" hidden>
                             </div>
 
 

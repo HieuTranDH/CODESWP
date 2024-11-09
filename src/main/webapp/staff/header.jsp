@@ -1,11 +1,8 @@
-<%-- 
-    Document   : header
-    Created on : Sep 24, 2024, 10:41:50 AM
-    Author     : ThanhDuoc
---%>
+
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="model.DAO.*" %>
 <%@ page import="model.*" %>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -137,14 +134,15 @@
                                                     <!-- Icon Font Awesome 'key' cho thay đổi mật khẩu -->
                                                     <i class="fa fa-key icon-gradient bg-amy-crisp btn-icon-wrapper mb-2"></i> Change Pass
                                                 </button>
+                                                
                                             </div>
                                             <div class="col-sm-6">
-                                                <button class="btn-icon-vertical btn-transition btn-transition-alt pt-2 pb-2 btn btn-outline-danger">
-                                                    <!-- Changed icon to Font Awesome 'info-circle' icon for viewing information -->
-                                                    <i class="fa fa-info-circle icon-gradient bg-love-kiss btn-icon-wrapper mb-2"></i>
-                                                    <b>View Information</b>
-                                                </button>
-                                            </div>
+                                            <button class="btn-icon-vertical btn-transition btn-transition-alt pt-2 pb-2 btn btn-outline-danger" 
+    data-toggle="modal" data-target="#staffInfoModal">
+    <i class="fa fa-info-circle icon-gradient bg-love-kiss btn-icon-wrapper mb-2"></i>
+    <b>View Information</b>
+</button>
+                                                </div>
                                         </div>
                                     </div>
 
@@ -214,6 +212,71 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="staffInfoModal" tabindex="-1" role="dialog" aria-labelledby="staffInfoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staffInfoModalLabel">Information</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <c:choose>
+                    <c:when test="${Staff != null}">
+                        <form id="staffForm" method="POST" action="${pageContext.request.contextPath}/staff/dashboard">
+                            <input type="hidden" name="action" value="updateInfo">
+                             <input type="hidden" name="id" value="${Staff.staffId}">
+                            <div class="form-group">
+                                <label for="staffName">Name</label>
+                                <input type="text" class="form-control" id="staffName" name="name" value="${Staff.name}">
+                            </div>
+                            <div class="form-group">
+                                <label for="staffEmail">Email</label>
+                                <input type="email" class="form-control" id="staffEmail" name="email" value="${Staff.email}" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="staffPhoneNumber">Phone Number</label>
+                                <input type="text" class="form-control" id="staffPhoneNumber" name="phoneNumber" value="${Staff.phoneNumber}">
+                            </div>
+                            <div class="form-group">
+                                <label for="staffHireDate">Hire Date</label>
+                                <input type="text" class="form-control" id="staffHireDate" name="hireDate" value="${Staff.hireDate}" readonly>
+                            </div>
+                        </form>
+                    </c:when>
+
+                    <c:when test="${Admin != null}">
+                        <form id="adminForm" method="POST" action="${pageContext.request.contextPath}/staff/dashboard">
+                            <input type="hidden" name="action" value="updateInfo">
+                             <input type="hidden" name="id"  value="${Admin.staffId}">
+                            <div class="form-group">
+                                <label for="adminName">Name</label>
+                                <input type="text" class="form-control" id="adminName" name="name" value="${Admin.name}">
+                            </div>
+                            <div class="form-group">
+                                <label for="adminEmail">Email</label>
+                                <input type="email" class="form-control" id="adminEmail" name="email" value="${Admin.email}" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="adminPhoneNumber">Phone Number</label>
+                                <input type="text" class="form-control" id="adminPhoneNumber" name="phoneNumber" value="${Admin.phoneNumber}">
+                            </div>
+                        </form>
+                    </c:when>
+                </c:choose>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" form="${sessionScope.Staff != null ? 'staffForm' : 'adminForm'}">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 <script>
     function validateForm() {
         return validatePassword();
@@ -310,6 +373,8 @@
     <% session.removeAttribute("msg"); %>
         }
     });
-
+  $('#staffInfoModal').on('show.bs.modal', function (event) {
+   
+});
 </script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>

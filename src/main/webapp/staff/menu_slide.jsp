@@ -1,4 +1,4 @@
-<div class="scrollbar-sidebar"> 
+<div class="scrollbar-sidebar">
     <div class="app-sidebar__inner">
         <ul class="vertical-nav-menu">
             <li class="app-sidebar__heading">Menu</li>
@@ -55,6 +55,11 @@
                             <li>
                                 <a href="${pageContext.request.contextPath}/staff/combo" >
                                     <i class="metismenu-icon"></i>Combo
+                                </a>
+                            </li>
+                            <li>
+                                <a href="${pageContext.request.contextPath}/staff/adminanalytic" >
+                                    <i class="metismenu-icon"></i>Admin Analytic
                                 </a>
                             </li>
                         </c:otherwise>

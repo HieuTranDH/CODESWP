@@ -67,9 +67,6 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="editProfileModalLabel">Chỉnh sửa hồ sơ</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Đóng">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
                             </div>
                             <div class="modal-body">
                                 <form id="editProfileForm" action="${pageContext.request.contextPath}/profile" method="post">

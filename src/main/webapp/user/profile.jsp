@@ -88,7 +88,7 @@
                                         <!-- Rating input (1-9) -->
                                         <div class="form-group">
                                             <label for="rating${ticket.ticketId}">Rating (1-9):</label>
-                                            <input type="number" class="form-control" id="rating${ticket.ticketId}" name="rating" min="1" max="9" required>
+                                            <input type="number" class="form-control" id="rating${ticket.ticketId}" name="rating" min="1" max="10" required>
                                             <small id="ratingError${ticket.ticketId}" class="form-text text-danger" style="display: none;">Rating must be between 1 and 10</small>
                                         </div>
                                         <!-- Comment input -->

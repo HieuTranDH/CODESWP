@@ -9,8 +9,8 @@
     <link rel="stylesheet" href="../static/css/index.css">
 </head>
 <nav>
-    <p class="logo">
-        FCM<span style="color:red;">FPTCinemamovie</span>
+    <p onclick="window.location.href = '${pageContext.request.contextPath}/main';" style="cursor:pointer;"  class="logo">
+        FCM<span  style="color:red;">FPTCinemamovie</span>
     </p>
     <i class="fa fa-bars" id="menu"></i>
     <ul id="menu-box">
@@ -159,9 +159,7 @@
                             // Hiển thị dropdown và kết quả tìm kiếm
                             if (data.length > 0) {
                                 dropdownResults.style.display = 'block';
-
                                 dropdownResults.innerHTML = data.map(movie => {
-                                    console.log("movieId:", movie.movieId);  // In ra movieId từ dữ liệu
                                     return "<div class='dropdown-item' data-id='" + movie.movieId + "'>" + movie.title + "</div>";
                                 }).join('');
                             } else {
@@ -176,24 +174,33 @@
                         });
             });
 
+            // Sử dụng 'keydown' thay vì 'keypress' và ngăn chặn hành động mặc định của form khi nhấn Enter
+            searchBar.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();  // Ngăn chặn hành động submit mặc định của form
+
+                    const query = this.value.trim();
+                    if (query !== "") {
+                        // Điều hướng đến trang searchresult.jsp và truyền từ khóa tìm kiếm
+                        window.location.href = '${pageContext.request.contextPath}/searchresult?query=' + encodeURIComponent(query);
+                    }
+                }
+            });
+
             // Xử lý sự kiện khi click vào dropdown item để điều hướng tới trang chi tiết phim
             dropdownResults.addEventListener('click', function (e) {
                 if (e.target && e.target.matches('.dropdown-item')) {
                     const movieId = e.target.getAttribute('data-id');  // Lấy movieId từ thuộc tính data-id
-                    console.log("Element clicked:", e.target);  // In ra phần tử được nhấp
-                    console.log("Movie ID:", movieId);  // Kiểm tra movieId lấy được
 
                     if (movieId && movieId !== "") {
                         // Chuyển hướng người dùng đến trang chi tiết phim với movieId
                         const contextPath = '<%= request.getContextPath() %>';
                         const url = contextPath + '/detail?movieId=' + movieId;
-                        console.log("Redirecting to URL:", url);  // Kiểm tra URL
                         window.location.href = url;
 
                     } else {
                         console.error('Movie ID not found or empty!');
                     }
-
                 }
             });
         }

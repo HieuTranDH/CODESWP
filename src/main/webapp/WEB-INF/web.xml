@@ -44,6 +44,14 @@
         <servlet-name>Staff_combo</servlet-name>
         <servlet-class>control.Staff_combo</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Customer_searchResult</servlet-name>
+        <servlet-class>control.Customer_searchResult</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Admin_Analytics</servlet-name>
+        <servlet-class>control.Admin_Analytics</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Customer_login</servlet-name>
         <url-pattern>/login</url-pattern>
@@ -87,6 +95,14 @@
     <servlet-mapping>
         <servlet-name>Staff_combo</servlet-name>
         <url-pattern>/staff/combo</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Customer_searchResult</servlet-name>
+        <url-pattern>/searchresult</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Admin_Analytics</servlet-name>
+        <url-pattern>/staff/adminanalytic</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

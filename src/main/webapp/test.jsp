@@ -154,8 +154,45 @@
             <h2>Bảng Thông Tin</h2>
             <p><strong>Tên Người Đặt: ${USER.name}</strong></p>
             <p><strong>Các ghế đã chọn:</strong> <span id="selected-seats"></span></p>
+            <p><strong>Giá ghế:</strong> <span id="price-seats"></span></p>
+
+            <div class="combo-selection">
+                <h2>Chọn Combo</h2>
+                <label for="combo">Combo: </label>
+                <select id="combo" name="combo">
+                    <option value="" data-price="0">Không chọn combo</option>
+                    <c:forEach var="combo" items="${combos}">
+                        <option value="${combo.comboId}" data-price="${combo.comboPrice}">${combo.comboName} - ${combo.comboPrice} VNĐ</option>
+                    </c:forEach>
+                </select>
+                <c:forEach var="combo" items="${combos}">
+                    <p id="combo-description-${combo.comboId}" class="combo-description" style="display: none;">
+                        ${combo.description}
+                    </p>
+                </c:forEach>
+            </div>
+
+
+            <div class="promotion-selection">
+                <h2>Chọn Khuyến Mãi</h2>
+                <label for="promotion">Khuyến Mãi: </label>
+                <select id="promotion" name="promotion">
+                    <option value="">Không chọn khuyến mãi</option>
+                    <c:forEach var="promotion" items="${promotions}">
+                        <option value="${promotion.promotionId}" 
+                                data-min-tickets="${promotion.minTicketQuantity}" 
+                                data-discount-percentage="${promotion.discountPercentage}" 
+                                data-max-discount="${promotion.maxDiscountAmount}">
+                            ${promotion.promotionId} - ${promotion.promotionCode} - Giảm ${promotion.discountPercentage}% (Tối đa ${promotion.maxDiscountAmount} VNĐ)
+                        </option>
+                    </c:forEach>
+                </select>
+                <p id="error" style="color: red;"></p> <!-- Thêm style cho thông báo lỗi -->
+            </div>
+
+
             <p><strong>Tổng Giá Vé:</strong> <span id="total-price">0.00 VNĐ</span></p>
-            <button id="confirm-btn" style="height: 40px;width: 200px" disabled>Xác nhận đặt vé</button>
+            <button id="confirm-btn" style="height: 40px; width: 200px;" disabled>Xác nhận đặt vé</button>
         </div>
     </div>
 
@@ -163,116 +200,141 @@
     <form id="booking-form" action="buyticket" method="POST">
         <input type="hidden" id="showtimeId" name="showtimeId" value="${showtimeId}">
         <input type="hidden" id="customerId" name="customerId" value="${USER.customerId}">
-        <input type="hidden" id="promotionId" name="promotionId" value="1">
-        <input type="hidden" id="comboId" name="comboId" value="1">
+        <input type="hidden" id="selectedPromotionId" name="selectedPromotionId" value="">
+        <input type="hidden" id="comboId" name="comboId" value="">
         <input type="hidden" id="totalPrice" name="totalPrice" value="">
         <input type="hidden" id="selectedSeats" name="selectedSeats" value="">
     </form>
 
     <script>
-        // Khởi tạo biến để lưu ghế đã chọn và tổng giá vé
         let selectedSeats = []; // Mảng chứa các đối tượng ghế
         let totalPrice = 0;
 
-        // Gắn sự kiện click cho các ghế
-        document.addEventListener('DOMContentLoaded', () => {
-            const seatElements = document.querySelectorAll('.seat');
-            seatElements.forEach(seat => {
-                seat.addEventListener('click', () => handleSeatClick(seat));
+        $(document).ready(function () {
+            // Thiết lập các sự kiện khi tài liệu được tải
+            $('.seat').on('click', function () {
+                handleSeatClick($(this)); // Sử dụng jQuery để lấy ghế
             });
 
-            // Thêm sự kiện cho nút xác nhận
-            document.getElementById('confirm-btn').addEventListener('click', confirmBooking);
+            $('#combo').on('change', handleComboChange);
+            $('#promotion').on('change', handlePromotionChange);
+            $('#confirm-btn').on('click', confirmBooking);
+
+            // Sự kiện khi thay đổi combo để hiển thị mô tả combo
+            $('#combo').on('change', function () {
+                // Ẩn tất cả các mô tả combo
+                $('.combo-description').hide();
+
+                // Hiển thị mô tả tương ứng với combo được chọn
+                const selectedComboId = $(this).val();
+                $('#combo-description-' + selectedComboId).show();
+            });
         });
 
-        // Hàm để cập nhật thông tin ghế đã chọn
-        function updateSelectedSeats() {
-            const selectedSeatsElement = document.getElementById('selected-seats');
-            const seatNumbers = selectedSeats.map(seat => seat.seatNumber); // Lấy số ghế từ các đối tượng trong mảng
-            selectedSeatsElement.textContent = seatNumbers.join(', '); // Hiển thị số ghế
-
-            // Cập nhật giá vé
-            const totalPriceElement = document.getElementById('total-price');
-            totalPriceElement.textContent = totalPrice.toFixed(2) + ' VNĐ';
-
-            // Kích hoạt hoặc hủy kích hoạt nút xác nhận
-            const confirmBtn = document.getElementById('confirm-btn');
-            confirmBtn.disabled = selectedSeats.length === 0;
-
-            console.log("Ghế đã chọn:", seatNumbers);
-            console.log("Giá tổng:", totalPrice.toFixed(2) + ' VNĐ');
+        function handleComboChange() {
+            updateTotalPrice(); // Cập nhật tổng giá sau khi chọn combo
         }
 
-        // Hàm xử lý sự kiện khi nhấp vào ghế
+        function handlePromotionChange() {
+            const selectedPromotion = $('#promotion option:selected');
+
+            // Cập nhật ID khuyến mãi
+            $('#selectedPromotionId').val(selectedPromotion.val());
+
+            updateTotalPrice(); // Cập nhật tổng giá sau khi chọn khuyến mãi
+        }
+
+        function updateTotalPrice() {
+            // Tính tổng giá ghế đã chọn
+            totalPrice = selectedSeats.reduce((sum, seat) => sum + seat.seatPrice, 0);
+
+            // Cập nhật giá combo
+            const selectedComboPrice = parseFloat($('#combo option:selected').data('price'));
+            totalPrice += selectedComboPrice; // Thêm giá combo
+
+            // Tính toán giảm giá nếu có khuyến mãi
+            const selectedPromotion = $('#promotion option:selected');
+
+            const errorElement = $('#error');
+            errorElement.text(''); // Xóa thông báo lỗi
+
+            if (selectedPromotion.val()) {
+                const minTickets = parseInt(selectedPromotion.data('min-tickets'));
+                const discountPercentage = parseFloat(selectedPromotion.data('discount-percentage'));
+                const maxDiscount = parseFloat(selectedPromotion.data('max-discount'));
+
+                if (selectedSeats.length >= minTickets) {
+                    const discountAmount = (totalPrice * discountPercentage) / 100;
+                    const finalDiscount = Math.min(discountAmount, maxDiscount);
+                    totalPrice -= finalDiscount; // Cập nhật tổng giá vé sau khi áp dụng giảm giá
+                } else {
+                    const errorMessage = 'Không đủ ghế để áp dụng khuyến mãi ' + selectedPromotion.val() + '. Cần ít nhất ' + minTickets + ' ghế.';
+                    errorElement.text(errorMessage); // Hiển thị thông báo lỗi
+                    $('#promotion').val(''); // Đặt lại khuyến mãi
+                    $('#selectedPromotionId').val(''); // Đặt lại ID khuyến mãi
+                }
+            } else {
+                $('#selectedPromotionId').val(''); // Đặt lại ID khuyến mãi
+            }
+
+            updateDisplayedTotalPrice(); // Cập nhật lại tổng giá vé trên giao diện
+            toggleConfirmButton(); // Kiểm tra và cập nhật trạng thái nút xác nhận
+        }
+
+        function updateDisplayedTotalPrice() {
+            $('#total-price').text(totalPrice.toFixed(2) + ' VNĐ'); // Hiển thị tổng giá
+        }
+
+        function toggleConfirmButton() {
+            $('#confirm-btn').prop('disabled', selectedSeats.length === 0); // Kích hoạt hoặc hủy kích hoạt nút xác nhận
+        }
+
+        function updateSelectedSeats() {
+            const seatNumbers = selectedSeats.map(seat => seat.seatNumber);
+            const seatPrices = selectedSeats.map(seat => seat.seatPrice);
+
+            $('#selected-seats').text(seatNumbers.join(', ')); // Hiển thị số ghế
+            $('#price-seats').text(seatPrices.join(', ')); // Hiển thị giá ghế
+
+            updateTotalPrice(); // Gọi hàm tính toán tổng giá mới
+        }
+
         function handleSeatClick(seat) {
-            const seatId = seat.getAttribute('data-seat-id'); // Lấy seatId từ thuộc tính data-seat-id
-            const seatNumber = seat.getAttribute('title');
-            const seatPrice = parseFloat(seat.dataset.price); // Lấy giá ghế từ thuộc tính data-price
+            const seatId = seat.data('seat-id'); // Lấy seatId từ thuộc tính data-seat-id
+            const seatNumber = seat.attr('title');
+            const seatPrice = parseFloat(seat.data('price')); // Lấy giá ghế từ thuộc tính data-price
 
-            console.log(`Nhấp vào ghế: ${seatNumber}, ID: ${seatId}, Giá: ${seatPrice} VNĐ`);
-
-            // Nếu ghế đã đặt, không làm gì cả
-            if (seat.classList.contains('booked')) {
+            if (seat.hasClass('booked')) {
                 console.log(`Ghế ${seatNumber} đã đặt. Không thể chọn.`);
                 return;
             }
 
-            // Kiểm tra nếu ghế đã được chọn
             const selectedSeatIndex = selectedSeats.findIndex(s => s.seatId === seatId);
             if (selectedSeatIndex !== -1) {
                 // Nếu đã chọn, bỏ chọn ghế
                 selectedSeats.splice(selectedSeatIndex, 1); // Bỏ chọn ghế
-                totalPrice -= seatPrice; // Giảm giá vé
-                seat.classList.remove('selected');
+                seat.removeClass('selected');
             } else {
                 // Nếu chưa chọn, thêm ghế vào danh sách đã chọn
-                selectedSeats.push({seatId, seatNumber}); // Thêm đối tượng ghế vào danh sách đã chọn
-                totalPrice += seatPrice; // Tăng giá vé
-                seat.classList.add('selected');
+                selectedSeats.push({seatId, seatNumber, seatPrice});
+                seat.addClass('selected');
             }
 
-            // Cập nhật thông tin ghế đã chọn
-            updateSelectedSeats();
+            updateSelectedSeats(); // Cập nhật thông tin ghế đã chọn
+            toggleConfirmButton(); // Cập nhật trạng thái nút xác nhận sau khi thay đổi ghế
         }
 
-// Hàm xác nhận đặt vé
         function confirmBooking() {
             // Cập nhật các giá trị ẩn trong form
-            document.getElementById('totalPrice').value = totalPrice.toFixed(2); // Cập nhật tổng giá vé
-            document.getElementById('selectedSeats').value = selectedSeats.map(s => s.seatId).join(','); // Cập nhật ID ghế đã chọn
+            $('#totalPrice').val(totalPrice.toFixed(2)); // Cập nhật tổng giá vé
+            $('#comboId').val($('#combo').val()); // Cập nhật combo đã chọn
+            $('#selectedSeats').val(selectedSeats.map(s => s.seatId).join(',')); // Cập nhật ID ghế đã chọn
 
-            // Gửi form
-            document.getElementById('booking-form').submit();
-        }
-        // Hàm xác nhận đặt vé
-        function confirmBooking() {
-            // Cập nhật các giá trị ẩn trong form
-            document.getElementById('totalPrice').value = totalPrice.toFixed(2); // Cập nhật tổng giá vé
-            document.getElementById('selectedSeats').value = selectedSeats.map(s => s.seatId).join(','); // Cập nhật ID ghế đã chọn
-
-            // Gửi form
-            document.getElementById('booking-form').submit();
-            const submitUrl = $("#booking-form").attr("action");
-            $.ajax({
-                type: "POST",
-                url: submitUrl,
-                data: postData,
-                dataType: 'JSON',
-                success: function (x) {
-                    if (x.code === '00') {
-                        if (window.vnpay) {
-                            vnpay.open({width: 768, height: 600, url: x.data});
-                        } else {
-                            location.href = x.data;
-                        }
-                        return false;
-                    } else {
-                        alert(x.Message);
-                    }
-                }
-            });
+            $('#booking-form').submit(); // Gửi form
         }
     </script>
+
+
 
     <link href="https://pay.vnpay.vn/lib/vnpay/vnpay.css" rel="stylesheet" />
     <script src="https://pay.vnpay.vn/lib/vnpay/vnpay.min.js"></script>

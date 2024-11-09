@@ -1,9 +1,14 @@
 <!doctype html>
 <html lang="en">
+    <%@ page import="model.DAO.*" %>
+    <%@ page import="model.*" %>
+    <%@ page import="util.DateUtils" %>
+
     <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
     <!-- Mirrored from demo.dashboardpack.com/architectui-html-pro/dashboards-commerce.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 23 Sep 2024 02:40:24 GMT -->
     <%@include file="head.jsp" %>
     <body>
+
         <div class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar">
             <%@include file="header.jsp" %> 
             <div class="ui-theme-settings">
@@ -249,331 +254,172 @@
                             <div class="page-title-wrapper">
                                 <div class="page-title-heading">
                                     <div class="page-title-icon">
-                                        <i class="fas fa-users icon-gradient bg-ripe-malin"></i>
+                                        <i class="fas fa-chart-bar icon-gradient bg-ripe-malin"></i>
                                     </div>
-                                    <div>Staff management
-                                        <div class="page-title-subheading">This dashboard was manage staff.</div>
+                                    <div>Revenue statistics management
+                                        <div class="page-title-subheading">This dashboard was manage System revenue statistics.</div>
                                     </div>
                                 </div>
                             </div>
                         </div> 
                         </ul>
-                        <div class="tabs-animation">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="main-card mb-3 card">
-                                        <div class="card-header">Staff Users
-                                            <div class="btn-actions-pane-right">
-                                                <div role="group" class="btn-group-sm btn-group">
+                        <c:set var="monthnow" value="${DateUtils.getCurrentMonth()}" />
+                        <c:set var="yearnow" value="${DateUtils.getCurrentYear()}" />
 
-                                                </div>
-                                            </div>
-                                        </div>
+
+                        <div class="tabs-animation">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="total-ranking-tab" data-toggle="tab" href="#total-ranking" role="tab" aria-controls="total-ranking" aria-selected="true">Total Ranking</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="year-ranking-tab" data-toggle="tab" href="#year-ranking" role="tab" aria-controls="year-ranking" aria-selected="false">Year Ranking ${yearnow}</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="monthly-ranking-tab" data-toggle="tab" href="#monthly-ranking" role="tab" aria-controls="monthly-ranking" aria-selected="false">Monthly Ranking ${monthnow}</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+
+                                <!-- Total Ranking Tab -->
+                                <div class="tab-pane fade show active" id="total-ranking" role="tabpanel" aria-labelledby="total-ranking-tab">
+                                    <div class="main-card mb-3 card">
+                                        <div class="card-header">Total Ranking</div>
+                                        <c:set var="cinemas" value="${Ticket_DB.getCinemaAnalytics()}" />
                                         <div class="table-responsive">
                                             <table class="align-middle mb-0 table table-borderless table-striped table-hover">
                                                 <thead>
                                                     <tr>
-                                                        <th class="text-center">#</th>
-                                                        <th>Name</th>
-                                                        <th class="text-center">Phone</th>
-                                                        <th class="text-center">Cinema</th>
-                                                        <th class="text-center">Hire date</th>
-                                                        <th class="text-center">Disabled date</th>
-                                                        <th class="text-center">Status</th>
-                                                        <th class="text-center">Actions</th>
+                                                        <th class="text-center">Rank</th>
+                                                        <th class="text-center">Name</th>
+                                                        <th class="text-center">Number of Tickets</th>
+                                                        <th class="text-center">Revenue</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <c:forEach var="staff" items="${staffList}" varStatus="status">
-                                                        <tr>
-                                                            <td class="text-center text-muted">#${status.index + 1}</td>
-                                                            <td>
-                                                                <div class="widget-content p-0">
-                                                                    <div class="widget-content-wrapper">
-                                                                        <div class="widget-content-left mr-3">
-                                                                            <div class="widget-content-left">
-                                                                                <img width="40" class="rounded-circle" src="assets/images/avatars/1.jpg" alt>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="widget-content-left flex2">
-                                                                            <div class="widget-heading">${staff.name}</div>
-                                                                            <div class="widget-subheading opacity-7">${staff.role}</div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td class="text-center">${staff.phoneNumber}</td>
-                                                            <td class="text-center">${staff.cinema.name}</td>
-                                                            <td class="text-center">${staff.hireDate}</td>
-                                                            <td class="text-center">${staff.disableDate}</td>
-                                                            <td class="text-center">${staff.status}</td>
-                                                            <td class="text-center">
-                                                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#updateStaffModal${staff.staffId}" onclick="setStaffId(${staff.staffId})">Update</button>   
-                                                            </td>
-
-
-                                                        </tr>
-                                                    <div class="modal fade" id="updateStaffModal${staff.staffId}" tabindex="-1" role="dialog" aria-labelledby="updateStaffLabel${staff.staffId}" aria-hidden="true">
-                                                        <div class="modal-dialog" role="document">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title" id="updateStaffLabel${staff.staffId}">Update Staff Information</h5>
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                        <span aria-hidden="true">&times;</span>
-                                                                    </button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <form action="${pageContext.request.contextPath}/staff/registerStaffAcount?action=updateProfile" method="post">
-                                                                        <input type="hidden" name="staffId" value="${staff.staffId}">
-
-                                                                        <!-- Email (cannot be changed) -->
-                                                                        <div class="form-group">
-                                                                            <label for="staffEmail${staff.staffId}">Email</label>
-                                                                            <input type="email" class="form-control" id="staffEmail${staff.staffId}" name="staffEmail" value="${staff.email}" readonly>
-                                                                        </div>
-
-                                                                        <!-- Dropdown for Cinema -->
-                                                                        <div class="form-group">
-                                                                            <label for="cinemaId${staff.staffId}">Cinema</label>
-                                                                            <select class="form-control" id="cinemaId${staff.staffId}" name="cinemaId" required>
-                                                                                <c:forEach var="cinema" items="${cinemaList}">
-                                                                                    <option value="${cinema.cinemaId}" <c:if test="${cinema.cinemaId == staff.cinemaId}">selected</c:if>>${cinema.name}</option>
-                                                                                </c:forEach>
-                                                                            </select>
-                                                                        </div>
-
-                                                                        <!-- Phone number (cannot be changed) -->
-                                                                        <div class="form-group">
-                                                                            <label for="staffPhone${staff.staffId}">Phone Number</label>
-                                                                            <input type="phone" class="form-control" id="staffPhone${staff.staffId}" name="staffPhone" value="${staff.phoneNumber}" readonly>
-                                                                        </div>
-
-                                                                        <!-- Role -->
-                                                                        <div class="form-group">
-                                                                            <label for="role${staff.staffId}">Role</label>
-                                                                            <input type="text" class="form-control" id="role${staff.staffId}" name="role" value="${staff.role}" readonly>
-
-
-                                                                        </div>
-                                                                        <!-- Status -->
-                                                                        <div class="form-group">
-                                                                            <label for="status${staff.staffId}">Status</label>
-                                                                            <select class="form-control" id="status${staff.staffId}" name="status">
-                                                                                <option value="Active" ${staff.status == 'Active' ? 'selected' : ''}>Active</option>
-                                                                                <option value="Cancel" ${staff.status == 'Cancel' ? 'selected' : ''}>Cancel</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <!-- Submit Button -->
-                                                                        <div class="modal-footer">
-
-                                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                                            <button type="submit" class="btn btn-primary">Save changes</button>
-
-                                                                        </div>
-                                                                    </form>
-
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-
-                                                </c:forEach>
-
+                                                    <c:choose>
+                                                        <c:when test="${empty cinemas}">
+                                                            <tr>
+                                                                <td colspan="4" class="text-center">There are no Cinemas.</td>
+                                                            </tr>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <c:set var="rank" value="1" />
+                                                            <c:forEach var="cinema" items="${cinemas}">
+                                                                <tr>
+                                                                    <td class="text-center">${rank}</td>
+                                                                    <td class="text-center">${cinema.name}</td>
+                                                                    <td class="text-center">${cinema.numberOfTicket}</td>
+                                                                    <td class="text-center">${cinema.totalPrice}</td>
+                                                                </tr>
+                                                                <c:set var="rank" value="${rank + 1}" />
+                                                            </c:forEach>
+                                                        </c:otherwise>
+                                                    </c:choose>
                                                 </tbody>
-
                                             </table>
                                         </div>
-                                        <div class="d-block text-center card-footer">
+                                    </div>
+                                </div>
 
-                                            <button class="btn-wide btn btn-success">Save</button>
-                                            <!-- Button to trigger the modal -->
-                                            <button class="btn-wide btn btn-success" data-toggle="modal" data-target="#registerStaffModal">Register Staff</button>
+                                <!-- Year Ranking Tab -->
+                                <div class="tab-pane fade" id="year-ranking" role="tabpanel" aria-labelledby="year-ranking-tab">
+                                    <div class="main-card mb-3 card">
+                                        <div class="card-header">Year Ranking ${yearnow}</div>
+                                        <c:set var="cinemas" value="${Ticket_DB.getCinemaAnalyticsForYear(yearnow)}" />
+                                        <div class="table-responsive">
+                                            <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-center">Rank</th>
+                                                        <th class="text-center">Name</th>
+                                                        <th class="text-center">Number of Tickets</th>
+                                                        <th class="text-center">Revenue</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <c:choose>
+                                                        <c:when test="${empty cinemas}">
+                                                            <tr>
+                                                                <td colspan="4" class="text-center">There are no Cinemas.</td>
+                                                            </tr>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <c:set var="rank" value="1" />
+                                                            <c:forEach var="cinema" items="${cinemas}">
+                                                                <tr>
+                                                                    <td class="text-center">${rank}</td>
+                                                                    <td class="text-center">${cinema.name}</td>
+                                                                    <td class="text-center">${cinema.numberOfTicket}</td>
+                                                                    <td class="text-center">${cinema.totalPrice}</td>
+                                                                </tr>
+                                                                <c:set var="rank" value="${rank + 1}" />
+                                                            </c:forEach>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
 
+                                <!-- Monthly Ranking Tab -->
+                                <div class="tab-pane fade" id="monthly-ranking" role="tabpanel" aria-labelledby="monthly-ranking-tab">
+                                    <div class="main-card mb-3 card">
+                                        <div class="card-header">Monthly Ranking ${monthnow}</div>
+                                        <c:set var="cinemas" value="${Ticket_DB.getCinemaAnalyticsForNovember(monthnow, yearnow)}" />
+                                        <div class="table-responsive">
+                                            <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-center">Rank</th>
+                                                        <th class="text-center">Name</th>
+                                                        <th class="text-center">Number of Tickets</th>
+                                                        <th class="text-center">Revenue</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <c:choose>
+                                                        <c:when test="${empty cinemas}">
+                                                            <tr>
+                                                                <td colspan="4" class="text-center">There are no Cinemas.</td>
+                                                            </tr>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <c:set var="rank" value="1" />
+                                                            <c:forEach var="cinema" items="${cinemas}">
+                                                                <tr>
+                                                                    <td class="text-center">${rank}</td>
+                                                                    <td class="text-center">${cinema.name}</td>
+                                                                    <td class="text-center">${cinema.numberOfTicket}</td>
+                                                                    <td class="text-center">${cinema.totalPrice}</td>
+                                                                </tr>
+                                                                <c:set var="rank" value="${rank + 1}" />
+                                                            </c:forEach>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+
                     </div>
                     <%@include file="footer.jsp" %>
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="registerStaffModal" tabindex="-1" role="dialog" aria-labelledby="registerStaffLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="registerStaffLabel">Register Staff</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-
-                        <form action="${pageContext.request.contextPath}/staff/registerStaffAcount?action=register"  method="post" onsubmit="return validateForm();">
-                            <div class="form-group">
-                                <label for="staffName">Staff Name</label>
-                                <input type="text" class="form-control" id="staffName" name="staffName" placeholder="Enter name" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="staffEmail">Email address</label>
-                                <input type="email" class="form-control" id="staffEmail" name="staffEmail" placeholder="Enter email" oninput="showEmailHint()" required>
-                                <small id="emailHint" class="form-text text-muted"></small>
-                            </div>
-                            <div class="form-group">
-                                <label for="password">Password</label>
-                                <input type="password" class="form-control" id="password" name="password" placeholder="Password" oninput="showPasswordHint()" required>
-                                <small id="passwordHint" class="form-text text-muted"></small>
-                            </div>
-                            <div class="form-group">
-                                <label for="confirmPassword">Confirm Password</label>
-                                <input type="password" class="form-control" id="confirmPassword" name="rePassword" placeholder="Confirm password" required>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Register</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-        <script>
 
 
-                            // Check if the message variable is set or not
-                            document.addEventListener("DOMContentLoaded", function (event) {
-                                // Ensure your DOM is fully loaded before executing any code
-                                var msg = "${sessionScope.msg}";
-                                console.log("Message from session:", msg);
-                                // Ki?m tra n?u msg không r?ng, hi?n th? thông báo
-                                if (msg !== null && msg !== "") {
-                                    swal({
-                                        title: msg.includes("Success") ? "Success" : "Error",
-                                        text: msg,
-                                        icon: msg.includes("Success") ? "success" : "error",
-                                        button: "OK!"
-                                    });
-                                    // Xóa msg sau khi hi?n th? ?? tránh hi?n th? l?i khi t?i l?i trang
-            <% session.removeAttribute("msg"); %>
-                                }
-                            });
 
 
-                            function validateForm() {
-                                return validateEmail() && validatePassword();
-                            }
 
-                            function validateEmail() {
-                                var email = document.getElementById("staffEmail").value; // Kh?p v?i ID trong form
-                                var emailHint = document.getElementById("emailHint");
-                                var emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
-                                var isValid = true;
-                                var errorMessage = "";
-
-                                if (!emailRegex.test(email)) {
-                                    isValid = false;
-                                    errorMessage = "Email must end with @gmail.com.";
-                                }
-
-                                if (!isValid) {
-                                    alert(errorMessage);
-                                    emailHint.textContent = errorMessage;
-                                } else {
-                                    emailHint.textContent = "";
-                                }
-
-                                return isValid;
-                            }
-
-                            function showEmailHint() {
-                                var email = document.getElementById("staffEmail").value; // Kh?p v?i ID trong form
-                                var emailHint = document.getElementById("emailHint");
-                                var emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
-
-                                if (!emailRegex.test(email)) {
-                                    emailHint.textContent = "Email must end with @gmail.com.";
-                                } else {
-                                    emailHint.textContent = "";
-                                }
-                            }
-
-                            function validatePassword() {
-                                var password = document.getElementById("password").value; // Kh?p v?i ID trong form
-                                var lowercaseRegex = /[a-z]/;
-                                var uppercaseRegex = /[A-Z]/;
-                                var digitRegex = /\d/;
-                                var specialCharRegex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
-
-                                var isValid = true;
-                                var errorMessage = "";
-
-                                if (!lowercaseRegex.test(password)) {
-                                    isValid = false;
-                                    errorMessage += "Password must contain at least one lowercase letter.\n";
-                                }
-
-                                if (!uppercaseRegex.test(password)) {
-                                    isValid = false;
-                                    errorMessage += "Password must contain at least one uppercase letter.\n";
-                                }
-
-                                if (!digitRegex.test(password)) {
-                                    isValid = false;
-                                    errorMessage += "Password must contain at least one digit.\n";
-                                }
-
-                                if (!specialCharRegex.test(password)) {
-                                    isValid = false;
-                                    errorMessage += "Password must contain at least one special character.\n";
-                                }
-
-                                if (!isValid) {
-                                    alert(errorMessage);
-                                }
-
-                                return isValid;
-                            }
-
-                            function showPasswordHint() {
-                                var password = document.getElementById("password").value; // Kh?p v?i ID trong form
-                                var passwordHint = document.getElementById("passwordHint");
-                                var lowercaseRegex = /[a-z]/;
-                                var uppercaseRegex = /[A-Z]/;
-                                var digitRegex = /\d/;
-                                var specialCharRegex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
-
-                                var hintMessage = "";
-
-                                if (!lowercaseRegex.test(password)) {
-                                    hintMessage += "Password should contain at least one lowercase letter. <br>";
-                                }
-
-                                if (!uppercaseRegex.test(password)) {
-                                    hintMessage += "Password should contain at least one uppercase letter. <br>";
-                                }
-
-                                if (!digitRegex.test(password)) {
-                                    hintMessage += "Password should contain at least one digit. <br>";
-                                }
-
-                                if (!specialCharRegex.test(password)) {
-                                    hintMessage += "Password should contain at least one special character. <br>";
-                                }
-
-                                passwordHint.innerHTML = hintMessage;
-                            }
-                            function setStaffId(staffId) {
-                                $("#updateStaffModal" + staffId).prependTo("body");
-                            }
-        </script>
 
 
         <%@include file="draw_wrapper.jsp" %>
-        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 
     </body>

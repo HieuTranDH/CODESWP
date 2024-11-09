@@ -344,26 +344,26 @@
 
                                 <!--Nho Thay Doi Gia Tri Cua StaffId và year-->
                                 <%
- int staffId = (int) pageContext.getAttribute("idstaff"); // Example staff ID
- int year = (int) pageContext.getAttribute("yearnow"); // Example year
+                                    int staffId = (int) pageContext.getAttribute("idstaff"); // Example staff ID
+                                    int year = (int) pageContext.getAttribute("yearnow"); // Example year
 // Retrieve data from the DAO
-Map<Integer, int[]> ticketStats = Ticket_DB.getTicketStatsForYear(staffId, year);
+                                    Map<Integer, int[]> ticketStats = Ticket_DB.getTicketStatsForYear(staffId, year);
 
-List<String> months = Arrays.asList("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
-List<Integer> revenues = new ArrayList<>();
-List<Integer> ticketsSold = new ArrayList<>(); // To store the number of tickets sold
+                                    List<String> months = Arrays.asList("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+                                    List<Integer> revenues = new ArrayList<>();
+                                    List<Integer> ticketsSold = new ArrayList<>(); // To store the number of tickets sold
 
 // Loop through the months and gather both revenue and tickets sold data
-for (int month = 1; month <= 12; month++) {
-int[] stats = ticketStats.get(month);
-if (stats != null) {
-ticketsSold.add(stats[0]);  // Number of tickets sold
-revenues.add(stats[1]);     // Revenue
-} else {
-ticketsSold.add(0);         // Default to 0 if no data
-revenues.add(0);            // Default to 0 if no data
-}
-}
+                                    for (int month = 1; month <= 12; month++) {
+                                        int[] stats = ticketStats.get(month);
+                                        if (stats != null) {
+                                            ticketsSold.add(stats[0]);  // Number of tickets sold
+                                            revenues.add(stats[1]);     // Revenue
+                                        } else {
+                                            ticketsSold.add(0);         // Default to 0 if no data
+                                            revenues.add(0);            // Default to 0 if no data
+                                        }
+                                    }
                                 %>
                                 <div style="margin-bottom: 30px" class="container mt-5">
                                     <div class="row">
@@ -382,9 +382,9 @@ revenues.add(0);            // Default to 0 if no data
                                 </div>
                                 <script>
                                     // Data from the server
-                                    const months = <%= new com.google.gson.Gson().toJson(months) %>;
-                                    const revenues = <%= new com.google.gson.Gson().toJson(revenues) %>;
-                                    const ticketsSold = <%= new com.google.gson.Gson().toJson(ticketsSold) %>;
+                                    const months = <%= new com.google.gson.Gson().toJson(months)%>;
+                                    const revenues = <%= new com.google.gson.Gson().toJson(revenues)%>;
+                                    const ticketsSold = <%= new com.google.gson.Gson().toJson(ticketsSold)%>;
 
                                     // Create the chart for revenue
                                     const ctxRevenue = document.getElementById('revenueChart').getContext('2d');

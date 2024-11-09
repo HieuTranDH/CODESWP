@@ -292,7 +292,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <c:set var="cinemas" value="${Cinema_DB.getAllCinemas2()}" />
+                                        <c:set var="cinemas" value="${Cinema_DB.getAllCinemas()}" />
                                         <div class="table-responsive">
                                             <table class="align-middle mb-0 table table-borderless table-striped table-hover">
                                                 <thead>
@@ -305,6 +305,7 @@
                                                         <th class="text-center">View Analytics</th>
                                                         <th class="text-center">Edit</th>
                                                         <th class="text-center">Delete</th>
+
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -346,14 +347,20 @@
                                                                         <input type="hidden" name="name" value="${cinema.cinemaId}">
                                                                         <button type="button" class="btn rounded w-100 btn-secondary" data-toggle="modal" data-target="#editCinema${cinema.cinemaId}">Edit</button>
                                                                     </td>
-                                                                    <td>
-                                                                        <input type="hidden" name="name" value="${cinema.cinemaId}">
-                                                                        <button type="button" class="btn rounded w-100 btn-secondary" data-toggle="modal" data-target="#deleteCinema${cinema.cinemaId}">
-                                                                            Delete
-                                                                        </button>
-                                                                    </td>
 
-
+                                                                    <c:choose>
+                                                                        <c:when test="${cinema.status eq 'open'}">
+                                                                            <td>
+                                                                                <input type="hidden" name="name" value="${cinema.cinemaId}">
+                                                                                <button type="button" class="btn rounded w-100 btn-secondary" data-toggle="modal" data-target="#deleteCinema${cinema.cinemaId}">
+                                                                                    Delete
+                                                                                </button>
+                                                                            </td>
+                                                                        </c:when>
+                                                                        <c:otherwise>
+                                                                            <td class="text-center" style="color: red; font-weight: bold;">Close</td>
+                                                                        </c:otherwise>
+                                                                    </c:choose>
                                                                 </tr>
                                                             </c:forEach>
                                                         </c:otherwise>

@@ -28,12 +28,13 @@
 
         .date-selector {
             display: flex;
-            justify-content: space-around;
             margin-bottom: 40px;
         }
 
         .date-selector button {
             background-color: #D3D3D3;
+            margin-top: 10px;
+            min-width: 200px;
             border: none;
             padding: 10px 20px;
             cursor: pointer;
@@ -44,8 +45,8 @@
 
 
         .date-selector button.selected {
-            background-color: red; 
-            color: white; 
+            background-color: red; /* Đổi màu nền thành đỏ */
+            color: white; /* Đổi màu chữ thành trắng (tùy chọn) */
         }
         .date-selector button:hover {
             background-color: blue;
@@ -168,84 +169,84 @@
         }
 
     </style>
-
-    <div class="filter-search-box">
-        <div class="filters-box">
-            <div class="all-filters filters">
-                Booking History
-                <i class="fa fa-angle-down"></i>
-            </div> 
-        </div>
-    </div>
-
     <div class="movie-card-section1">
         <div class="movie-container">
-            <div class="date-selector" id="dateSelector"></div>
+            <div class="date-selector row" id="dateSelector"></div>
             <div class="cinema-movie" id="cinemaMovie">
+                <c:set var="displayedMovies" value="${empty displayedMovies ? [] : displayedMovies}" /> <!-- Danh sách để lưu tiêu đề phim đã hiển thị -->
+                <c:set var="movieIndex" value="1" /> <!-- Biến để đánh số thứ tự phim -->
                 <c:forEach var="movie" items="${currentlyShowingMovies}">
-                    <div style="margin-bottom: 40px">
-                        <div class="movie-details" data-title="${movie.title}">
-                            <!-- Thông tin phim -->
-                            <div class="movie-poster">
-                                <img src="${movie.poster}" alt="${movie.title} Poster">
-                            </div>
+                    <c:if test="${!displayedMovies.contains(movie.title)}"> <!-- Kiểm tra nếu tiêu đề chưa được hiển thị -->
+                        <c:set var="dummy" value="${displayedMovies.add(movie.title)}" /> <!-- Thêm tiêu đề vào danh sách -->
+                        <div style="margin-bottom: 40px">
+                            <div class="movie-details" data-title="${movie.title}">
+                                <!-- Thông tin phim --> 
+                                <div class="movie-poster">
+                                    <img src="${movie.poster}" alt="${movie.title} Poster">
+                                </div>
 
-                            <div class="movie-info">
-                                <h1>${movie.title}</h1>
-                                <span class="rating">G</span> 
-                                <span class="duration">${movie.duration} phút</span>
-                                <p>${movie.description}</p>
-                                <ul style="display: block;">
-                                    <li><strong>Release Date:</strong> ${movie.releaseDate}</li>
-                                    <li><strong>Genre:</strong> ${movie.genre}</li>
-                                </ul>
-                            </div>
+                                <div class="movie-info">
+                                    <h1>${movie.title}</h1> <!-- Đánh số thứ tự cho tiêu đề -->
+                                    <span class="rating">G</span> <!-- Thay thế bằng giá trị rating -->
+                                    <span class="duration">${movie.duration} phút</span>
+                                    <p>${movie.description}</p>
+                                    <ul style="display: block;">
+                                        <li><strong>Release Date:</strong> ${movie.releaseDate}</li>
+                                        <li><strong>Genre:</strong> ${movie.genre}</li>
+                                    </ul>
+                                </div>
 
-                            <div class="movie-rating">
-                                <span class="rating-circle">${movie.averageRating}</span>
+                                <div class="movie-rating">
+                                    <span class="rating-circle">${movie.averageRating}</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="cinema-showtimes">
-                            <c:forEach var="cinema" items="${cinemas}">
-                                <h2 style="color: white;">${cinema.name}</h2> 
-                                <div class="showtimes">
-                                    <c:forEach var="screeningRoom" items="${cinema.screeningRooms}">
-                                        <c:forEach var="showtime" items="${screeningRoom.showtimes}">
-                                            <c:if test="${showtime.movie.movieId == movie.movieId}"> 
-                                                <div class="cinema-showtime" data-showtime="${showtime.startTime}">
-                                                    <div class="showtime-selector">
-                                                        <div class="showtime">
-                                                            <a href="<c:choose>
-                                                                   <c:when test="${not empty USER}">
-                                                                       buyticket?showtimeId=${showtime.showtimeId}
-                                                                   </c:when>
-                                                                   <c:otherwise>
-                                                                       login?value=login
-                                                                   </c:otherwise>
-                                                               </c:choose>" style="color: inherit;text-decoration: none;">
-                                                                <span>${showtime.startTime}</span>
-                                                            </a>
+                            <div class="cinema-showtimes">
+                                <!-- Hiển thị suất chiếu của từng bộ phim -->
+                                <c:forEach var="cinema" items="${cinemas}">
+                                    <h2 style="color: white;">${cinema.name}</h2> <!-- Hiển thị tên rạp -->
+                                    <div class="showtimes">
+                                        <c:forEach var="screeningRoom" items="${cinema.screeningRooms}">
+                                            <c:forEach var="showtime" items="${screeningRoom.showtimes}">
+                                                <c:if test="${showtime.movie.movieId == movie.movieId}"> <!-- Kiểm tra bộ phim -->
+                                                    <div class="cinema-showtime" data-showtime="${showtime.startTime}">
+                                                        <div class="showtime-selector">
+                                                            <div class="showtime">
+                                                                <a href="<c:choose>
+                                                                       <c:when test="${not empty USER}">
+                                                                           buyticket?showtimeId=${showtime.showtimeId}
+                                                                       </c:when>
+                                                                       <c:otherwise>
+                                                                           login?value=login
+                                                                       </c:otherwise>
+                                                                   </c:choose>" style="color: inherit;text-decoration: none;">
+                                                                    <span>${showtime.startTime}</span> <!-- Hiển thị thời gian chiếu -->
+                                                                </a>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </c:if>
+                                                </c:if>
+                                            </c:forEach>
                                         </c:forEach>
-                                    </c:forEach>
-                                </div>
-                            </c:forEach>
+                                    </div>
+                                </c:forEach>
+                            </div>
                         </div>
-                    </div>
+                        <c:set var="movieIndex" value="${movieIndex + 1}" /> <!-- Cập nhật số thứ tự phim -->
+                    </c:if>
                 </c:forEach>
             </div>
         </div>
     </div>
+
+
+
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const dateSelector = document.getElementById('dateSelector');
             const cinemaMovieContainer = document.getElementById('cinemaMovie');
 
-            const today = new Date();
+            const today = new Date(); // Lấy thời gian hiện tại theo múi giờ hệ thống
             console.log("Ngày hiện tại (GMT +7): ", today.toLocaleDateString('vi-VN'));
 
             function formatDate(date) {
@@ -258,9 +259,13 @@
                 return date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0');
             }
 
-            for (let i = 0; i < 7; i++) {
+            for (let i = 0; i < 14; i++) {
                 const currentDate = new Date(today);
                 currentDate.setDate(today.getDate() + i);
+
+                // Tạo một div mới với class col-md-2 để mỗi nút chiếm 2 cột
+                const colDiv = document.createElement('div');
+                colDiv.classList.add('col-md-2'); // Mỗi nút chiếm 2 cột (có thể điều chỉnh với các kích thước khác nếu cần)
 
                 const button = document.createElement('button');
                 button.textContent = formatDate(currentDate);
@@ -282,12 +287,18 @@
                     this.classList.add('selected');
                 });
 
-                dateSelector.appendChild(button);
+                // Thêm button vào div và sau đó thêm div vào dateSelector
+                colDiv.appendChild(button);
+                dateSelector.appendChild(colDiv);
             }
+
 
             function filterShowtimesByDate(selectedDate) {
                 const movieDetails = document.querySelectorAll('.movie-details');
                 let hasShowtime = false;
+
+                const now = new Date(); // Lấy thời gian hiện tại
+                const selectedDateTime = new Date(selectedDate); // Chuyển đổi selectedDate thành Date object
 
                 movieDetails.forEach(movie => {
                     const cinemaShowtimes = movie.nextElementSibling; // Lấy phần tử chứa suất chiếu
@@ -295,7 +306,10 @@
                     let movieHasShowtime = false;
 
                     showtimes.forEach(showtime => {
-                        if (showtime.dataset.showtime.startsWith(selectedDate)) {
+                        const showtimeDate = new Date(showtime.dataset.showtime); // Chuyển đổi thời gian chiếu thành Date object
+
+                        // Kiểm tra xem suất chiếu có trong ngày đã chọn và lớn hơn hoặc bằng thời gian hiện tại
+                        if (showtimeDate >= now && showtimeDate.toLocaleDateString() === selectedDateTime.toLocaleDateString()) {
                             showtime.style.display = 'block';
                             movieHasShowtime = true; // Có suất chiếu cho bộ phim này
                             hasShowtime = true; // Có ít nhất một suất chiếu cho ngày đã chọn

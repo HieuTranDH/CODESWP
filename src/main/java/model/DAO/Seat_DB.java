@@ -141,4 +141,10 @@ public class Seat_DB implements DBinfo {
         return false;
     }
 
+    public static void main(String[] args) {
+          ArrayList<Seat> seatoldlist = getAllSeatByRoomIDNone(3);
+          for(Seat s : seatoldlist){
+              System.out.println(s);
+          }
+    }
 }
