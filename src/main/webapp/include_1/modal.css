@@ -1,0 +1,34 @@
+.modal {
+    display: none; /* Ẩn modal theo mặc định */
+    position: fixed; /* Ở vị trí cố định */
+    z-index: 1; /* Đặt lên trên các phần tử khác */
+    left: 0;
+    top: 0;
+    width: 100%; /* Toàn bộ chiều rộng */
+    height: 100%; /* Toàn bộ chiều cao */
+    overflow: auto; /* Cho phép cuộn nếu cần */
+    background-color: rgb(0,0,0); /* Màu nền */
+    background-color: rgba(0,0,0,0.4); /* Màu nền với độ trong suốt */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% từ trên và giữa giữa */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Chiều rộng modal */
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
