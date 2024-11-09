@@ -17,7 +17,7 @@ import java.util.List;
 import model.Customer;
 import model.DAO.Customer_DB;
 import model.Ticket;
-
+//aloalo
 @MultipartConfig(maxFileSize = 1024 * 1024 * 10) // 10 MB
 public class Customer_profile extends HttpServlet {
 
