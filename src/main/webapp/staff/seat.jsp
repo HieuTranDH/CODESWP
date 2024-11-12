@@ -104,10 +104,10 @@
             }
         </style>
     </head>
-    <body>
+    <body>  
         <c:set var="screenroom" value="${ScreeningRoom_DB.getScreeningRoomById(roomId)}" />
         <c:set var="seats" value="${Seat_DB.getAllSeatByRoomIDNone(roomId)}" />
-        <!-- Nút quay lại -->
+        <!-- Nút quay lại --> 
         <div style="margin-bottom: 20px;">
             <a href="${pageContext.request.contextPath}/staff/screenroom" class="btn btn-primary">Quay lại</a>
         </div>
@@ -205,7 +205,7 @@
             });
 
 
-            // Xóa ghế
+            // Xóa ghếếế 
             document.querySelectorAll('.delete-seat-btn').forEach(deleteBtn => {
                 deleteBtn.addEventListener('click', function () {
                     const seatId = this.getAttribute('data-seat-id');
