@@ -17,10 +17,6 @@ import model.DAO.Cinema_DB;
 import model.DAO.Movie_DB;
 import model.Movie;
 
-/**
- *
- * @author ThanhDuoc
- */
 @WebServlet(name = "Movie_detail", urlPatterns = {"/detail"})
 public class Movie_detail extends HttpServlet {
 
