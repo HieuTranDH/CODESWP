@@ -6,10 +6,7 @@ package model;
 
 import java.util.Date;
 
-/**
- *
- * @author ThanhDuoc
- */
+
 public class MovieRating {
 
     private int ratingId;
@@ -18,7 +15,7 @@ public class MovieRating {
     private double rating;
     private String comment;
     private Date ratingDate;
-    private String customerName; // Thêm thuộc tính này
+    private String customerName;
 
     public MovieRating(int ratingId, int movieId, int customerId, double rating, String comment, Date ratingDate) {
         this.ratingId = ratingId;
