@@ -57,7 +57,7 @@ public class Payment extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Chuyển tiếp request đến JSP
+        // Chuyển tiếp request đến jsp
         request.getRequestDispatcher("vnpay_pay.jsp").forward(request, response);
     }
 
