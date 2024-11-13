@@ -330,7 +330,7 @@ public class Admin_showTimeManagement extends HttpServlet {
 
                     boolean isSuccess = db.addShowTime(newShowtime);
                     if (!isSuccess) {
-                        conflictMessage.append("Thêm showtime thất bại cho phòng " + roomId + " vào ngày " + selectedDate + ".\n");
+                        conflictMessage.append("Thêm showtime thất bại cho phòng ").append(roomId).append(" vào ngày ").append(selectedDate).append(".\n");
                         success = false;
                     }
                 }
