@@ -27,15 +27,6 @@ import util.UserGoogleDto;
 
 public class Customer_login extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
@@ -49,8 +40,7 @@ public class Customer_login extends HttpServlet {
         Customer userInfo = customerDB.getCustomerByEmail(usergg.getEmail());
         if (userInfo != null) {
             request.getSession().setAttribute("USER", userInfo);
-//            response.sendRedirect("home");
-            response.sendRedirect(request.getContextPath() + "/index.jsp"); // Đường dẫn đến trang chính
+            response.sendRedirect(request.getContextPath() + "/index.jsp");
         } else {
             String msg = "Email account has not been created yet! ";
             session.setAttribute("message", msg);
@@ -60,7 +50,6 @@ public class Customer_login extends HttpServlet {
     }
 
     public static String getToken(String code) throws ClientProtocolException, IOException {
-        // call api to get token
         String response = Request.Post(Constants.GOOGLE_LINK_GET_TOKEN)
                 .bodyForm(Form.form().add("client_id", Constants.GOOGLE_CLIENT_ID)
                         .add("client_secret", Constants.GOOGLE_CLIENT_SECRET)
