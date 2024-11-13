@@ -41,7 +41,6 @@ public class Admin_Promotion extends HttpServlet {
                     int minTicketQuantity = Integer.parseInt(request.getParameter("UsageLimitInput"));
                     int maxTicketQuantity = Integer.parseInt(request.getParameter("UsageCountInput"));
                     String validFromStr = request.getParameter("ValidFromInput");
-                    //pro
                     String validToStr = request.getParameter("ValidToInput");
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                     Date startDate = dateFormat.parse(validFromStr);
@@ -59,14 +58,13 @@ public class Admin_Promotion extends HttpServlet {
                     promotion.setDescription(promotionDescription);
                     pdb.updatePromotion(promotion);
 
-                    // Chuyển hướng sau khi cập nhật thành công
                     session.setAttribute("message", "Edit Success.");
                     response.sendRedirect("promotion");
 
                 } catch (ParseException e) {
                     e.printStackTrace();
                 } catch (Exception e) {
-                    e.printStackTrace(); // In lỗi ra để theo dõi
+                    e.printStackTrace();
                 }
                 break;
             case "adddiscount":

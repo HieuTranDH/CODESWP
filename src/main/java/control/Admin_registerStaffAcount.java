@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package control;
 
 import jakarta.servlet.annotation.WebServlet;
@@ -28,7 +24,6 @@ public class Admin_registerStaffAcount extends HttpServlet {
             throws ServletException, IOException {
 
         List<Staff> staffList = Staff_DB.getAllStaffWithCinema();
-        // Lọc những nhân viên có vai trò "admin"
         List<Staff> filteredStaffList = new ArrayList<>();
         for (Staff staff : staffList) {
             if (!"Admin".equalsIgnoreCase(staff.getRole())) {
@@ -39,7 +34,6 @@ public class Admin_registerStaffAcount extends HttpServlet {
         List<Cinema> cinemaList = Cinema_DB.getAvailableCinemas();
 
         request.setAttribute("cinemaList", cinemaList);
-        // Chuyển hướng tới JSP để hiển thị danh sách Staff
         request.getRequestDispatcher("/staff/dashboards-staff.jsp").forward(request, response);
 
     }
@@ -131,7 +125,6 @@ public class Admin_registerStaffAcount extends HttpServlet {
         
         String msg;
 
-        // Check if the staff exists
         if (existingStaff == null) {
             msg = "Nhân viên không tồn tại.";
             session.setAttribute("msg", msg);
@@ -141,7 +134,6 @@ public class Admin_registerStaffAcount extends HttpServlet {
 
         Staff staff = new Staff(staffId, userName, email, phoneNumber, cinemaId,status);
 
-        // Call update method without password
         boolean isUpdated = staffDB.updateStaff(staff);
 
         if (isUpdated) {
