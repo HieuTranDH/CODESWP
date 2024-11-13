@@ -212,7 +212,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
             return; // Kết thúc hàm nếu ghế đã được đặt
         }
 
-        // Nếu tất cả ghế đều có sẵn, tiếp tục lưu vé
+        // Nếu tất cả ghế đều có sẵn, tiếp tục lưu vé vào đã chọn
         Date purchaseDate = new Date();
         Ticket_DB ticketDAO = new Ticket_DB();
         Integer ticketId = ticketDAO.addTicket(showtimeId, totalPrice, customerId, purchaseDate,
