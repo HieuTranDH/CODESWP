@@ -11,7 +11,7 @@
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script>
-    // Check if the message variable is set or not
+
     document.addEventListener("DOMContentLoaded", (event) => {
         var errorMessage = "${message}";
         if (errorMessage != "") {
@@ -396,7 +396,6 @@
 </c:forEach>
 
 
-<!-- Loop modal to edit Combo -->
 <c:forEach var="combo" items="${combos}">
     <div class="modal fade" id="editCombo${combo.comboId}" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
