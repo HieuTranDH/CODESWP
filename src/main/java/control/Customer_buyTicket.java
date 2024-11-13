@@ -83,7 +83,7 @@ public class Customer_buyTicket extends HttpServlet {
         List<Promotion> promotions = new ArrayList<>(); // Danh sách khuyến mãi
         HttpSession session = request.getSession();
 
-        // Xóa các thuộc tính liên quan trong session nếu có
+        // Xóa các thuộc tính liên quan trong session nếu có tồn 
         session.removeAttribute("ticketId");
         session.removeAttribute("totalPrice");
 
