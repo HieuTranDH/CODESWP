@@ -233,7 +233,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
             ajaxServlet paymentServlet = new ajaxServlet();
             paymentServlet.doPost(request, response);  // Gọi doPost của PaymentServlet
 
-            // Log sau khi gọi doPost
+            // Log sau khi gọi doPostt
             System.out.println("Called doPost of PaymentServlet.");
         }
 
