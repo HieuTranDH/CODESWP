@@ -60,16 +60,7 @@ public class Customer_searchResult extends HttpServlet {
             throws ServletException, IOException {
         // Lấy từ khóa tìm kiếm từ request
         String keyword = request.getParameter("query");
-        System.out.println("Search keyword: " + keyword);
-
-        // Tạo đối tượng từ Customer_DB để lấy danh sách phim
-        Customer_DB customerDB = new Customer_DB();
-
-        // Tìm kiếm phim dựa trên từ khóa
-        ArrayList<Movie> movies = customerDB.searchMovies(keyword);
-
-        // Kiểm tra kết quả và thêm vào request attributes
-        request.setAttribute("movies", movies);  // Đặt danh sách movies vào request để truy cập từ JSP
+        
 
         // Chuyển hướng đến trang searchresult.jsp
         request.getRequestDispatcher("/searchresult.jsp").forward(request, response);
