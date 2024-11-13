@@ -43,7 +43,7 @@ public class ScreeningRoom {
                 .orElse(null);
     }
 
-    // Method to add a seat to the screening room
+    // Method to add a seat to screening room
     public void addSeat(Seat seat) {
         seats.add(seat);
     }
