@@ -4,14 +4,12 @@
     <%@ page import="model.*" %>
 
     <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-    <!-- Mirrored from demo.dashboardpack.com/architectui-html-pro/dashboards-commerce.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 23 Sep 2024 02:40:24 GMT -->
     <%@include file="head.jsp" %>
     <body>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
 
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
         <script>
-            // Check if the message variable is set or not
             document.addEventListener("DOMContentLoaded", (event) => {
                 var errorMessage = "${message}";
 
@@ -380,7 +378,7 @@
                         <div class="modal-header">
                             <h5 class="modal-title">Edit ScreeningRoom #${screen.roomId}</h5>
                             <button class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">×</span>
+                                <span aria-hidden="true">ï¿½</span>
                             </button>
                         </div>
                         <form action="screenroom" method="post">
@@ -422,7 +420,7 @@
                     <div class="modal-header">
                         <h5 class="modal-title" id="addScreenLabel">Add New ScreeningRoom</h5>
                         <button class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
+                            <span aria-hidden="true">ï¿½</span>
                         </button>
                     </div>
                     <form action="screenroom" method="post">

@@ -2,23 +2,13 @@ const seatMap = document.getElementById('seat-map');
 const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']; // Hàng ghế từ A đến I
 const seatsPerRow = 10; // Số ghế mỗi hàng
 
-// Tạo ghế cho mỗi hàng
 rows.forEach(rowLetter => {
     const seatRow = document.createElement('div');
     seatRow.classList.add('seat-row');
     seatRow.dataset.row = rowLetter;
 
-    // Xác định loại ghế theo hàng
-    let seatType = '';
-    if (rowLetter >= 'A' && rowLetter <= 'E') {
-        seatType = 'standard'; // Ghế thường
-    } else if (rowLetter >= 'F' && rowLetter <= 'H') {
-        seatType = 'vip'; // Ghế VIP
-    } else if (rowLetter === 'I') {
-        seatType = 'couple'; // Ghế đôi
-    }
 
-    // Tạo từng ghế trong hàng
+
     for (let i = 1; i <= seatsPerRow; i++) {
         const seat = document.createElement('div');
         seat.classList.add('seat', seatType);
