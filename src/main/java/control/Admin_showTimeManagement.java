@@ -314,7 +314,7 @@ public class Admin_showTimeManagement extends HttpServlet {
                     if (isOverlapping(selectedDate + " " + startTime, selectedDate + " " + endTime, existingStartTime, existingEndTime)
                             || isWithinFifteenMinutes2(existingEndTime, selectedDate + " " + startTime)) {
                         hasConflict = true;
-                        conflictMessage.append("Xung đột showtime cho phòng " + roomId + " vào ngày " + selectedDate + ".\n");
+                        conflictMessage.append("Xung đột showtime cho phòng ").append(roomId).append(" vào ngày ").append(selectedDate).append(".\n");
                         success = false;
                         break;
                     }
