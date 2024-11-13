@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package control;
 
 import com.google.gson.Gson;
@@ -69,15 +65,6 @@ public class Customer_login extends HttpServlet {
         return googlePojo;
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -92,14 +79,6 @@ public class Customer_login extends HttpServlet {
         }
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -114,7 +93,6 @@ public class Customer_login extends HttpServlet {
 
         String msg;
 
-        // Kiểm tra xem email có tồn tại trong bảng Staff hay không
         if (staffDB.checkStaffByEmail(identifier)) {
             Staff staff = staffDB.getStaffByEmail(identifier);
 
@@ -132,14 +110,12 @@ public class Customer_login extends HttpServlet {
                     String role = staff.getRole();
                     if (role.equalsIgnoreCase("Staff")) {
                         session.setAttribute("Staff", staff);
-                        // Xử lý cookie nếu chọn "Remember me"
                         handleRememberMe(response, identifier, password, rememberMe);
 
                         response.sendRedirect(request.getContextPath() + "/staff/dashboard");
                         return;
                     } else if (role.equalsIgnoreCase("Admin")) {
                         session.setAttribute("Admin", staff);
-                        // Xử lý cookie nếu chọn "Remember me"
                         handleRememberMe(response, identifier, password, rememberMe);
 
                         response.sendRedirect(request.getContextPath() + "/staff/listcinema");
@@ -158,16 +134,12 @@ public class Customer_login extends HttpServlet {
                     String role = staff.getRole();
                     if (role.equalsIgnoreCase("Staff")) {
                         session.setAttribute("Staff", staff);
-                        // Xử lý cookie nếu chọn "Remember me"
                         handleRememberMe(response, identifier, password, rememberMe);
 
-//                response.sendRedirect("/dashboard");
-//                 trang jsp thu nghiem
                         response.sendRedirect(request.getContextPath() + "/staff/dashboard");
                         return;
                     } else if (role.equalsIgnoreCase("Admin")) {
                         session.setAttribute("Admin", staff);
-                        // Xử lý cookie nếu chọn "Remember me"
                         handleRememberMe(response, identifier, password, rememberMe);
 
                         response.sendRedirect(request.getContextPath() + "/staff/listcinema");
@@ -212,7 +184,6 @@ public class Customer_login extends HttpServlet {
 
                     session.setAttribute("USER", customer);
 
-                    // Xử lý cookie nếu chọn "Remember me"
                     handleRememberMe(response, identifier, password, rememberMe);
 
                     response.sendRedirect("/FCM/main");
@@ -229,7 +200,6 @@ public class Customer_login extends HttpServlet {
     }
 
     private void handleRememberMe(HttpServletResponse response, String identifier, String password, String rememberMe) {
-        // Xử lý cookie nếu chọn "Remember me"
         if (rememberMe != null && rememberMe.equals("true")) {
             Cookie emailCookie = new Cookie("identify", identifier);
             Cookie passwordCookie = new Cookie("password", password);
@@ -243,7 +213,6 @@ public class Customer_login extends HttpServlet {
             response.addCookie(passwordCookie);
             response.addCookie(rememberMeCookie);
         } else {
-            // Xóa cookie nếu không chọn "Remember me"
             Cookie emailCookie = new Cookie("identify", "");
             Cookie passwordCookie = new Cookie("password", "");
             Cookie rememberMeCookie = new Cookie("rememberMe", "");
@@ -258,14 +227,6 @@ public class Customer_login extends HttpServlet {
         }
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-//alo adsakda
+
+
 }

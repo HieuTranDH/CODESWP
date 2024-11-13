@@ -47,7 +47,6 @@ public class Customer_profile extends HttpServlet {
                 Integer customerId = user.getCustomerId(); // Lấy customerId từ đối tượng User
                 if (customerId != null) {
                     Customer_DB cdb = new Customer_DB();
-                    // Gọi hàm lấy thông tin ticket theo ticket_id giảm dần
                     List<Ticket> ticketDetails = cdb.getTicketDetails(customerId);
                     request.setAttribute("ticketDetails", ticketDetails);
                 }
@@ -120,7 +119,6 @@ public class Customer_profile extends HttpServlet {
                 currentUser.setBirthdate(null);
             }
 
-            // Cập nhật thông tin khách hàng
             Customer_DB.updateCustomerInfo(currentUser);
             session.setAttribute("msg", "Cập nhật thông tin Success.");
         } catch (Exception e) {
@@ -147,7 +145,6 @@ public class Customer_profile extends HttpServlet {
                 String avatarPath = "uploads/" + fileName;
                 currentUser.setAvatar(avatarPath);
 
-                // Cập nhật avatar
                 Customer_DB.updateAvatar(currentUser);
                 session.setAttribute("msg", "Cập nhật avatar Success.");
             } catch (Exception e) {
@@ -185,7 +182,6 @@ public class Customer_profile extends HttpServlet {
                 return "Mật khẩu hiện tại không đúng.";
             }
 
-            // Mã hóa mật khẩu mới trước khi cập nhật
             boolean updateSuccess = userDB.changePass(email, newPassword);
             if (updateSuccess) {
                 session.setAttribute("msg", "Đổi mật khẩu Success.");
@@ -201,8 +197,5 @@ public class Customer_profile extends HttpServlet {
         }
     }
 
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }
+
 }

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package control;
 
 import java.io.IOException;
@@ -40,12 +36,9 @@ public class Customer_register extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Kiểm tra xem người dùng đã đăng nhập hay chưa
         if (request.getSession().getAttribute("USER") != null) {
-            // Nếu đã đăng nhập, chuyển hướng đến trang chính
             response.sendRedirect(response.encodeRedirectURL("home"));
         } else {
-            // Nếu chưa đăng nhập, hiển thị trang đăng nhập
             request.getRequestDispatcher("/auth/register.jsp").forward(request, response);
         }
     }
@@ -107,9 +100,6 @@ public class Customer_register extends HttpServlet {
     }
 
     
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+
 
 }
