@@ -31,7 +31,7 @@ import model.Ticket;
 
 /**
  *
- * @author ThanhDuoc
+ * @author truonghuy
  */
 @WebServlet(name = "Customer_buyTicket", urlPatterns = {"/buyticket"})
 public class Customer_buyTicket extends HttpServlet {
@@ -90,7 +90,7 @@ public class Customer_buyTicket extends HttpServlet {
         // Lấy showtimeId từ request
         String showtimeIdParam = request.getParameter("showtimeId");
 
-        // Kiểm tra xem showtimeId có tồn tại và hợp lệ không
+        // Kiểm tra xem showtimeId có tồn tại và hợp lệ hay không
         if (showtimeIdParam != null) {
             try {
                 int showtimeId = Integer.parseInt(showtimeIdParam); // Chuyển đổi thành số nguyên
@@ -99,7 +99,6 @@ public class Customer_buyTicket extends HttpServlet {
                 // Gọi phương thức để lấy thông tin ghế dựa trên showtimeId
                 seats = cdb.getSeatStatusByShowtimeId(showtimeId);
 
-                // (Tùy chọn) Lấy danh sách combos từ cơ sở dữ liệu
                 Combo_DB comboDB = new Combo_DB();
                 combos = comboDB.getAllCombo(); // Giả sử bạn có phương thức này để lấy danh sách combos
 
@@ -198,19 +197,21 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
             System.out.println("Selected Seats: " + selectedSeats);
         }
 
-        // Kiểm tra trạng thái ghế từ bảng TicketSeat
+
         Cinema_DB cdb = new Cinema_DB();
         boolean allSeatsAvailable = cdb.areSeatsAvailable(selectedSeats, showtimeId);
         System.out.println("Seats available: " + allSeatsAvailable);
 
         if (!allSeatsAvailable) {
-            // Nếu một hoặc nhiều ghế đã được đặt, hiển thị thông báo lỗi và dừng quá trình
+            // Nếu một hoặc nhiều ghế đã được đặt, hiển thị thông báo lỗi và dừng quá trình đặt 
+
             System.out.println("Error: One or more seats are already booked.");
             session.setAttribute("errorMessage", "Một hoặc nhiều ghế đã được đặt. Vui lòng chọn lại ghế khác.");
             response.sendRedirect(request.getContextPath() + "/buyticket?showtimeId=" + showtimeId);
             System.out.println("Redirected to buyticket page due to seat booking issue.");
             return; // Kết thúc hàm nếu ghế đã được đặt
         }
+
 
         // Nếu tất cả ghế đều có sẵn, tiếp tục lưu vé
         Date purchaseDate = new Date();
@@ -219,12 +220,14 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
                 promotionId, 0.0, comboId, "NotCheckin", selectedSeats);
         System.out.println("Ticket ID: " + ticketId);
 
+
         // Kiểm tra kết quả lưu vé
         if (ticketId == null) {
             System.out.println("Error: Ticket booking failed.");
             request.setAttribute("errorMessage", "Đặt vé không thành công. Vui lòng thử lại.");
             request.getRequestDispatcher("error.jsp").forward(request, response);
         } else {
+
             // Lưu dữ liệu vào session
             session.setAttribute("ticketId", ticketId);
             session.setAttribute("totalPrice", totalPrice);

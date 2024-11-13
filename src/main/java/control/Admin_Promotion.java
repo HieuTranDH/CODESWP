@@ -108,12 +108,12 @@ public class Admin_Promotion extends HttpServlet {
                     session.setAttribute("message", "Add Success.");
                     response.sendRedirect("promotion");
 
-                } catch (ParseException e) {
+                } catch (ParseException | IOException | NumberFormatException e) {
                     e.printStackTrace();
-                } catch (Exception e) {
-                    e.printStackTrace(); // Print the error (ideally, handle it properly)
                 }
+            // Print the error (ideally, handle it properly)
                 break;
+
             case "deletepromotion":
                 int promotionId = Integer.parseInt(request.getParameter("promotionId"));
                 Promotion promotion = pdb.getPromotionById(promotionId);

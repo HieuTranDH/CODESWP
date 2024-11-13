@@ -20,7 +20,7 @@ public class Showtime {
     public Showtime() {
     }
 
-    // Constructor with Movie object
+    // constructor with Movie objectt
     public Showtime(int showtimeId, String startTime, String endTime) {
         this.showtimeId = showtimeId;
         this.startTime = startTime;
