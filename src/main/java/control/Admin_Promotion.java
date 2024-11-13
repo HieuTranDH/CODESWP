@@ -94,7 +94,7 @@ public class Admin_Promotion extends HttpServlet {
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                     Date startDate = dateFormat.parse(validFromStr);
                     Date endDate = dateFormat.parse(validToStr);
-
+                    
                     Promotion promotion = pdb.getPromotionById(promotionId);
                     promotion.setPromotionId(promotionId);
                     promotion.setPromotionCode(promotionCode);
@@ -114,7 +114,7 @@ public class Admin_Promotion extends HttpServlet {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 } catch (Exception e) {
-                    e.printStackTrace(); // In lỗi ra để theo dõi
+                    e.printStackTrace(); // In lỗi ra để theo dõi quá trình mua
                 }
                 break;
             case "adddiscount":
