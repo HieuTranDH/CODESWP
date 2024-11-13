@@ -219,7 +219,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
                 promotionId, 0.0, comboId, "NotCheckin", selectedSeats);
         System.out.println("Ticket ID: " + ticketId);
 
-        // Kiểm tra kết quả lưu vé
+        // Kiểm tra kết quả lưu của vé
         if (ticketId == null) {
             System.out.println("Error: Ticket booking failed.");
             request.setAttribute("errorMessage", "Đặt vé không thành công. Vui lòng thử lại.");
