@@ -31,7 +31,7 @@ import model.Ticket;
 
 /**
  *
- * @author ThanhDuoc
+ * @author truonghuy
  */
 @WebServlet(name = "Customer_buyTicket", urlPatterns = {"/buyticket"})
 public class Customer_buyTicket extends HttpServlet {
@@ -90,7 +90,7 @@ public class Customer_buyTicket extends HttpServlet {
         // Lấy showtimeId từ request
         String showtimeIdParam = request.getParameter("showtimeId");
 
-        // Kiểm tra xem showtimeId có tồn tại và hợp lệ không
+        // Kiểm tra xem showtimeId có tồn tại và hợp lệ hay không
         if (showtimeIdParam != null) {
             try {
                 int showtimeId = Integer.parseInt(showtimeIdParam); // Chuyển đổi thành số nguyên
