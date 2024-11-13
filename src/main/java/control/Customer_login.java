@@ -278,5 +278,5 @@ public class Customer_login extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
+//alo adsakda
 }

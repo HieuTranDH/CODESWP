@@ -39,11 +39,7 @@
                 }
             });
         </script>
-        <c:if test="${not empty message}">
-            <%
-                session.removeAttribute("message");
-            %>
-        </c:if>
+        
         <div class="app-container app-theme-white body-tabs-shadow">
             <div class="app-container">
                 <div class="h-100">

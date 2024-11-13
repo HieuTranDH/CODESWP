@@ -99,7 +99,6 @@ public class Customer_buyTicket extends HttpServlet {
                 // Gọi phương thức để lấy thông tin ghế dựa trên showtimeId
                 seats = cdb.getSeatStatusByShowtimeId(showtimeId);
 
-                // (Tùy chọn) Lấy danh sách combos từ CSDL
                 Combo_DB comboDB = new Combo_DB();
                 combos = comboDB.getAllCombo(); // Giả sử bạn có phương thức này để lấy danh sách combos
 
@@ -198,13 +197,14 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
             System.out.println("Selected Seats: " + selectedSeats);
         }
 
-        // Kiểm tra trạng thái ghế từ bảng ticketseat
+
         Cinema_DB cdb = new Cinema_DB();
         boolean allSeatsAvailable = cdb.areSeatsAvailable(selectedSeats, showtimeId);
         System.out.println("Seats available: " + allSeatsAvailable);
 
         if (!allSeatsAvailable) {
             // Nếu một hoặc nhiều ghế đã được đặt, hiển thị thông báo lỗi và dừng quá trình đặt 
+
             System.out.println("Error: One or more seats are already booked.");
             session.setAttribute("errorMessage", "Một hoặc nhiều ghế đã được đặt. Vui lòng chọn lại ghế khác.");
             response.sendRedirect(request.getContextPath() + "/buyticket?showtimeId=" + showtimeId);
@@ -212,20 +212,23 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
             return; // Kết thúc hàm nếu ghế đã được đặt
         }
 
-        // Nếu tất cả ghế đều có sẵn, tiếp tục lưu vé vào đã chọn
+
+        // Nếu tất cả ghế đều có sẵn, tiếp tục lưu vé
         Date purchaseDate = new Date();
         Ticket_DB ticketDAO = new Ticket_DB();
         Integer ticketId = ticketDAO.addTicket(showtimeId, totalPrice, customerId, purchaseDate,
                 promotionId, 0.0, comboId, "NotCheckin", selectedSeats);
         System.out.println("Ticket ID: " + ticketId);
 
-        // Kiểm tra kết quả lưu của vé
+
+        // Kiểm tra kết quả lưu vé
         if (ticketId == null) {
             System.out.println("Error: Ticket booking failed.");
             request.setAttribute("errorMessage", "Đặt vé không thành công. Vui lòng thử lại.");
             request.getRequestDispatcher("error.jsp").forward(request, response);
         } else {
-            // Lưu dữ liệu của vé vào session
+
+            // Lưu dữ liệu vào session
             session.setAttribute("ticketId", ticketId);
             session.setAttribute("totalPrice", totalPrice);
             System.out.println("Redirecting to PaymentServlet...");
@@ -233,7 +236,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
             ajaxServlet paymentServlet = new ajaxServlet();
             paymentServlet.doPost(request, response);  // Gọi doPost của PaymentServlet
 
-            // Log sau khi gọi doPostt
+            // Log sau khi gọi doPost
             System.out.println("Called doPost of PaymentServlet.");
         }
 
