@@ -167,7 +167,15 @@ public class Customer_profile extends HttpServlet {
             return "Vui lòng đăng nhập.";
         }
 
-        //
+        String email = user.getEmail();
+        String currentPassword = request.getParameter("currentPassword");
+        String newPassword = request.getParameter("newPassword");
+        String confirmNewPassword = request.getParameter("confirmPassword");
+
+        if (!newPassword.equals(confirmNewPassword)) {
+            session.setAttribute("msg", "Mật khẩu mới và xác nhận không khớp.");
+            return "Mật khẩu mới và xác nhận không khớp.";
+        }
 
         Customer_DB userDB = new Customer_DB();
 
