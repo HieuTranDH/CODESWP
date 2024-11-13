@@ -1,27 +1,27 @@
 <%@include file="header_movie.jsp" %>
 
 <section>
-    <style>.comments-section {
-            background-color: #333; /* Màu n?n */
-            color: white;           /* Màu ch? */
+    <style>
+    .comments-section {
+            background-color: #333;
+            color: white;
         }
-
-        .comment-item {
-            background-color: #444; /* Màu n?n cho t?ng bình lu?n */
-            border-radius: 5px;     /* Bo tròn các góc */
-            margin-bottom: 15px;    /* Kho?ng cách gi?a các bình lu?n */
-        }
-
         .comment-item strong {
-            color: #ffc107;         /* Màu ch? cho tên ng??i dùng */
-        }</style>
+                    color: #ffc107;
+                }
+        .comment-item {
+            background-color: #444;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
 
-    <!----filter-search-box---->
+    </style>
+
     <div class="movie-card-section">
         <div class="card">
-            <!-- Nhúng video YouTube -->
-            <iframe width="100%" height="315" src="https://www.youtube.com/embed/xWgd2czwMG0" 
-                    frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+            <iframe width="100%" height="315"
+                src="https://www.youtube.com/embed/xWgd2czwMG0"
+                frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
             </iframe>
 
             <div class="card-content">
