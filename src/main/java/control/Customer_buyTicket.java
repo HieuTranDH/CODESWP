@@ -99,7 +99,7 @@ public class Customer_buyTicket extends HttpServlet {
                 // Gọi phương thức để lấy thông tin ghế dựa trên showtimeId
                 seats = cdb.getSeatStatusByShowtimeId(showtimeId);
 
-                // (Tùy chọn) Lấy danh sách combos từ cơ sở dữ liệu
+                // (Tùy chọn) Lấy danh sách combos từ CSDL
                 Combo_DB comboDB = new Combo_DB();
                 combos = comboDB.getAllCombo(); // Giả sử bạn có phương thức này để lấy danh sách combos
 
