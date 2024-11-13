@@ -92,17 +92,7 @@ public class Customer_register extends HttpServlet {
                 request.getRequestDispatcher("/auth/register.jsp").forward(request, response);
             }
 
-            if (checkEmail && checkUsername) {
-                int x = new Random().nextInt(90000) + 10000;
-                Email.sendEmail(email, x);
-
-                // Cài đặt thuộc tính cho JSP xác thực
-                request.setAttribute("x", x);
-                request.setAttribute("userName", userName);
-                request.setAttribute("email", email);
-                request.setAttribute("password", password);
-                request.getRequestDispatcher("/auth/verifyemail.jsp").forward(request, response);
-            }
+            //
         }
     }
 
