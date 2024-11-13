@@ -356,7 +356,13 @@ public class Admin_showTimeManagement extends HttpServlet {
         out.flush();
     }
 
-    
+    private boolean isOverlapping(String start1, String end1, String start2, String end2) {
+        // Suất chiếu bị trùng khi:
+        // - Suất 1 bắt đầu trước khi suất 2 kết thúc và kết thúc sau khi suất 2 bắt đầu
+        // - Đồng thời, không được trùng khớp với giờ bắt đầu và giờ kết thúc của suất chiếu hiện tại
+        return (start1.compareTo(end2) < 0 && end1.compareTo(start2) > 0)
+                || start1.equals(start2) || end1.equals(end2);
+    }
 
 // Helper method to check if a start time is within 15 minutes after an end time
     private boolean isWithinFifteenMinutes(String endTime, String startTime) {
