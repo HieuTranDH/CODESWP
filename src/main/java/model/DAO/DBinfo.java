@@ -5,7 +5,7 @@
 package model.DAO;
 
 public interface DBinfo {
-//123456
+
     String dbURL = "jdbc:sqlserver://localhost:1433;databaseName=CinemaDB;encrypt=true;trustServerCertificate=true;";
     String dbUser = "sa";
     String dbPass = "123";

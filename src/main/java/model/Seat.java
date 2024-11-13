@@ -128,4 +128,10 @@ public class Seat {
     public void setCinemaAddress(String cinemaAddress) {
         this.cinemaAddress = cinemaAddress;
     }
+
+    @Override
+    public String toString() {
+        return "Seat{" + "seatId=" + seatId + ", seatNumber=" + seatNumber + ", seatType=" + seatType + ", seatStatus=" + seatStatus + ", seatPrice=" + seatPrice + ", roomName=" + roomName + ", startTime=" + startTime + ", endTime=" + endTime + ", movieTitle=" + movieTitle + ", cinemaName=" + cinemaName + ", cinemaAddress=" + cinemaAddress + '}';
+    }
+
 }

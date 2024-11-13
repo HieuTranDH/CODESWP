@@ -27,15 +27,6 @@ import model.Staff;
 @WebServlet(name = "Admin_RegisterStaffAcount", urlPatterns = {"/staff/registerStaffAcount"})
 public class Admin_registerStaffAcount extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -98,12 +89,12 @@ public class Admin_registerStaffAcount extends HttpServlet {
         String action = request.getParameter("action"); // Get the action parameter
         HttpSession session = request.getSession();
 
-        if ("register".equals(action)) {
-            handleStaffRegistration(request, response, session);
-        } else if ("updateProfile".equals(action)) {
-            handleStaffUpdate(request, response, session);
-        }
-    }
+         if ("register".equals(action)) {
+        handleStaffRegistration(request, response, session);
+    } else if ("updateProfile".equals(action)) {
+        handleStaffUpdate(request, response, session);
+    } 
+   }
 
     private void handleStaffRegistration(HttpServletRequest request, HttpServletResponse response, HttpSession session)
             throws IOException {
@@ -176,10 +167,10 @@ public class Admin_registerStaffAcount extends HttpServlet {
         String phoneNumber = request.getParameter("staffPhone"); // Retrieve phone number
         int cinemaId = Integer.parseInt(request.getParameter("cinemaId")); // Retrieve cinema ID
         int staffId = Integer.parseInt(request.getParameter("staffId")); // Assuming staffId is passed in the request
-
+        String status = request.getParameter("status");
         Staff_DB staffDB = new Staff_DB();
         Staff existingStaff = staffDB.getStaffById(staffId); // Method to get existing staff by ID
-
+        
         String msg;
 
         // Check if the staff exists
@@ -190,7 +181,7 @@ public class Admin_registerStaffAcount extends HttpServlet {
             return;
         }
 
-        Staff staff = new Staff(staffId, userName, email, phoneNumber, cinemaId);
+        Staff staff = new Staff(staffId, userName, email, phoneNumber, cinemaId,status);
 
         // Call update method without password
         boolean isUpdated = staffDB.updateStaff(staff);
@@ -204,6 +195,8 @@ public class Admin_registerStaffAcount extends HttpServlet {
         session.setAttribute("msg", msg);
         response.sendRedirect(request.getContextPath() + "/staff/registerStaffAcount");
     }
+   
+
 
     /**
      * Returns a short description of the servlet.

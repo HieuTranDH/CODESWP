@@ -1,0 +1,149 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    text-align: center;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px auto;
+    background-color: #e0e0e0; /* Màu nền xám */
+    border-radius: 5px;
+    padding: 20px; /* Padding cho khung */
+    height: 50%
+}
+
+.theater {
+    flex: 2; /* Chiếm không gian lớn hơn */
+}
+
+.screen {
+    background-color: #ccc;
+    padding: 5px;
+    margin: 10px auto;
+    width: 100%;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.seat-row {
+    margin: 5px;
+    display: flex;
+    justify-content: center;
+}
+
+.seat {
+    width: 30px;
+    height: 30px;
+    margin: 2px;
+    cursor: pointer;
+    display: inline-block;
+    border-radius: 5px;
+    color: white;
+    text-align: center;
+    line-height: 30px;
+    transition: background-color 0.3s ease;
+}
+
+/* Màu ban đầu của từng loại ghế */
+.seat.couple {
+    background-color: #FF69B4; /* Hồng */
+}
+
+.seat.vip {
+    background-color: #8B0000; /* Đỏ đậm */
+}
+
+.seat.standard {
+    background-color: #4CAF50; /* Xanh lá cây */
+}
+
+/* Ghế đã đặt */
+.seat.booked {
+    background-color: #808080;
+    cursor: not-allowed;
+}
+
+/* Ghế đang được chọn */
+.seat.selected {
+    background-color: #FFD700; /* Màu vàng */
+}
+
+/* Bảng thông tin bên phải */
+.info-panel {
+    flex: 1; /* Chiếm không gian nhỏ hơn */
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    padding: 15px;
+    margin-left: 10px;
+}
+
+.info-panel h2 {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.info-item {
+    text-align: left; /* Căn trái */
+    margin-bottom: 10px; /* Khoảng cách giữa các mục */
+}
+
+/* Thông tin ghế */
+.seat-info {
+    margin-top: 10px; /* Khoảng cách giữa phần thông tin ghế và các mục khác */
+    display: flex;
+    justify-content: space-around; /* Căn đều các mục */
+}
+
+.seat-info div {
+    text-align: left; /* Căn trái */
+    display: flex;
+    align-items: center;
+}
+
+.seat-info div span {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.seat-info .booked-seat {
+    background-color: #808080; /* Màu ghế đã đặt */
+}
+
+.seat-info .selected-seat {
+    background-color: #FFD700; /* Màu ghế đang chọn */
+}
+
+.seat-info .couple-seat {
+    background-color: #FF69B4; /* Màu ghế Couple */
+}
+
+.seat-info .vip-seat {
+    background-color: #8B0000; /* Màu ghế VIP */
+}
+
+.seat-info .standard-seat {
+    background-color: #4CAF50; /* Màu ghế Standard */
+}
+
+button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+}
+button.add-seat-btn{
+
+    height: 40px;
+    margin-top: 10px;
+}

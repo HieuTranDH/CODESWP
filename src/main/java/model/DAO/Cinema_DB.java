@@ -244,7 +244,7 @@ public static List<Cinema> getAvailableCinemas() {
     String query = "SELECT c.cinema_id, c.name, c.address, c.phone_number, c.email " +
                    "FROM Cinema c " +
                    "LEFT JOIN Staff s ON c.cinema_id = s.cinema_id " +
-                   "WHERE s.cinema_id IS NULL"; // Lấy những rạp mà không có nhân viên nào được gán
+                   "WHERE s.cinema_id IS NULL AND c.status = 'open'"; // Lấy những rạp mà không có nhân viên nào được gán
     List<Cinema> cinemas = new ArrayList<>();
 
     try (Connection con = DriverManager.getConnection(dbURL, dbUser, dbPass); 

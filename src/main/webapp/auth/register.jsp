@@ -17,16 +17,7 @@
         <meta name="msapplication-tap-highlight" content="no">
         <link href="demo.dashboardpack.com/architectui-html-pro/main.d810cf0ae7f39f28f336.css" rel="stylesheet"></head>
     <body>
-        <div class="app-container app-theme-white body-tabs-shadow">
-            <div class="app-container">
-                <div class="h-100">
-                    <div class="h-100 no-gutters row">
-                        <div class="h-100 d-md-flex d-sm-block bg-white justify-content-center align-items-center col-md-12 col-lg-7">
-                            <div class="mx-auto app-login-box col-sm-12 col-md-10 col-lg-9">
-                                <h4>
-                                    <div>Welcome to FCM FPT Cinema Movie</div>
-                                    <span>It only takes a <span class="text-success">few seconds</span> to create your account</span>
-                                </h4>
+        
                                 <div>
                                     <form name="input" action="register" method="post" onsubmit="return validateForm()">
                                         <div class="form-row">
@@ -48,16 +39,15 @@
 
                                             <div class="col-md-6">
                                                 <div class="position-relative form-group">
-                                                    <label for="examplePassword" class><span class="text-danger">*</span> Enter Password</label>
-                                                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" onkeyup="showPasswordHint()" required>
+                                                    <label for="examplePassword" class><span class="text-danger">*</span> Password</label>
+                                                    <input type="password" class="form-control" id="password" name="password" placeholder="Enter new password" onkeyup="showPasswordHint()" required>
                                                     <div id="passwordHint" style="color: #666; font-size: 14px; margin-top: 5px;"></div>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="position-relative form-group">
                                                     <label for="examplePasswordRep" class><span class="text-danger">*</span> Repeat Password</label>
-                                                    <input type="password" class="form-control rounded" id="rePassword" name="rePassword" placeholder="Re-enter
-                                                           password" required>                                                </div>
+                                                    <input type="password" class="form-control rounded" id="rePassword" name="rePassword" placeholder="Re-enter new password" required>                                                </div>
                                             </div>
                                         </div>
                                         <c:if test="${not empty message}">

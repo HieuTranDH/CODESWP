@@ -47,8 +47,8 @@ CREATE TABLE Showtime (
     room_id INT,                               -- Khóa ngoại liên kết với bảng ScreeningRoom
     start_time DATETIME NOT NULL,              -- Thời gian bắt đầu của suất chiếu
     end_time DATETIME NOT NULL,                -- Thời gian kết thúc của suất chiếu
-    CONSTRAINT FK_Showtime_Movie FOREIGN KEY (movie_id) REFERENCES Movie(movie_id), -- Liên kết với bảng Movie
-    CONSTRAINT FK_Showtime_ScreeningRoom FOREIGN KEY (room_id) REFERENCES ScreeningRoom(room_id) -- Liên kết với bảng ScreeningRoom
+    CONSTRAINT FK_Showtime_Movie FOREIGN KEY (movie_id) REFERENCES Movie(movie_id) ON DELETE CASCADE,  -- Liên kết với bảng Movie
+    CONSTRAINT FK_Showtime_ScreeningRoom FOREIGN KEY (room_id) REFERENCES ScreeningRoom(room_id) ON DELETE CASCADE -- Liên kết với bảng ScreeningRoom
 );
 GO
 -- Tạo bảng Seat
@@ -133,13 +133,16 @@ CREATE TABLE Staff (
     staff_id INT IDENTITY(1,1) PRIMARY KEY,     -- Khóa chính, tự tăng
     cinema_id INT NULL,                         -- Khóa ngoại liên kết với bảng Cinema (nhân viên có thể không thuộc rạp cụ thể)
     name NVARCHAR(255) NOT NULL,                -- Tên nhân viên
-    hire_date DATE DEFAULT GETDATE(),           -- Ngày thuê
+    hire_date DATE DEFAULT GETDATE(),				-- Ngày thuê
+	disabled_date DATE NULL, 
     email NVARCHAR(100) UNIQUE NOT NULL,        -- Email nhân viên (phải là duy nhất)
     phone_number NVARCHAR(15),                  -- Số điện thoại của nhân viên
     password NVARCHAR(255) NOT NULL,            -- Mật khẩu nhân viên (đã mã hóa)
     role NVARCHAR(100) NOT NULL,                -- Vai trò của nhân viên (ví dụ: Quản lý, Nhân viên bán vé)
+	status NVARCHAR(50),
     CONSTRAINT FK_Staff_Cinema FOREIGN KEY (cinema_id) REFERENCES Cinema(cinema_id) -- Liên kết với bảng Cinema
 );
+
 GO
 -- Tạo bảng MovieRating
 CREATE TABLE MovieRating (
@@ -178,15 +181,15 @@ VALUES
 -- Dữ liệu mẫu cho bảng Showtime
 INSERT INTO Showtime (movie_id, room_id, start_time, end_time)
 VALUES 
-(1, 1, '2024-10-05 18:30:00', '2024-10-05 20:30:00'),
-(2, 1, '2024-10-04 19:00:00', '2024-10-04 21:00:00'),
-(1, 1, '2024-10-06 18:30:00', '2024-10-06 20:30:00'),
-(2, 1, '2024-10-02 19:00:00', '2024-10-02 21:00:00'),
-(1, 1, '2024-10-08 18:30:00', '2024-10-08 20:30:00'),
-(2, 1, '2024-10-04 19:00:00', '2024-10-04 21:00:00'),
-(1, 1, '2024-10-03 18:30:00', '2024-10-03 20:30:00'),
-(2, 1, '2024-10-05 19:00:00', '2024-10-05 21:00:00'),
-(3, 2, '2024-10-04 20:00:00', '2024-10-04 21:30:00');
+(1, 1, '2024-10-05 18:30:00', '2024-10-07 20:30:00'),
+(2, 1, '2024-10-04 19:00:00', '2024-10-08 21:00:00'),
+(1, 1, '2024-10-06 18:30:00', '2024-10-07 20:30:00'),
+(2, 1, '2024-10-02 19:00:00', '2024-10-06 21:00:00'),
+(1, 1, '2024-10-08 18:30:00', '2024-10-07 20:30:00'),
+(2, 1, '2024-10-04 19:00:00', '2024-10-09 21:00:00'),
+(1, 1, '2024-10-03 18:30:00', '2024-10-10 20:30:00'),
+(2, 1, '2024-10-05 19:00:00', '2024-10-11 21:00:00'),
+(3, 2, '2024-10-04 20:00:00', '2024-10-1 21:30:00');
 
 -- Dữ liệu mẫu cho bảng Seat
 -- Dữ liệu mẫu cho bảng Seat cho phòng chiếu 1 với các ghế từ A đến I
@@ -288,7 +291,7 @@ VALUES
 -- Dữ liệu mẫu cho bảng Staff
 INSERT INTO Staff (cinema_id, name, hire_date, email, phone_number, password, role)
 VALUES 
-(1, N'Lê Văn C', '2023-01-01', N'admin@gmail.com', N'0988123456', N'123', N'Admin'),
+(NULL, N'Lê Văn C', '2023-01-01', N'admin@gmail.com', N'0988123456', N'123', N'Admin'),
 (2, N'Phạm Thị D', '2023-02-15', N'staff@gmail.com', N'0988765432', N'123', N'Staff');
 -- Dữ liệu mẫu cho bảng MovieRating
 INSERT INTO MovieRating (movie_id, customer_id, rating, comment, rating_date)

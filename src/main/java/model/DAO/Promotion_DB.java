@@ -57,7 +57,6 @@ public class Promotion_DB {
         } catch (SQLException e) {
             Logger.getLogger(Promotion_DB.class.getName()).log(Level.SEVERE, null, e);
         }
-
         return promotions;
     }
 

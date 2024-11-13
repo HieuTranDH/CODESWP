@@ -141,7 +141,7 @@ public class Admin_ListCinema extends HttpServlet {
             }
         } else {
             // Lấy staffId từ request
-
+      
             int cinemaid = Integer.parseInt(request.getParameter("cinemaid"));
 
             // Lấy đối tượng Staff từ database
