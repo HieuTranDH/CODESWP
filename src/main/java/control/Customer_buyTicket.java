@@ -198,7 +198,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
             System.out.println("Selected Seats: " + selectedSeats);
         }
 
-        // Kiểm tra trạng thái ghế từ bảng TicketSeat
+        // Kiểm tra trạng thái ghế từ bảng ticketseat
         Cinema_DB cdb = new Cinema_DB();
         boolean allSeatsAvailable = cdb.areSeatsAvailable(selectedSeats, showtimeId);
         System.out.println("Seats available: " + allSeatsAvailable);
