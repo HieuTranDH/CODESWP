@@ -89,12 +89,12 @@ public class ScreeningRoom {
         this.seatCapacity = seatCapacity;
     }
 
-    // Getter for showtimes
+    // Getter for showtime
     public List<Showtime> getShowtimes() {
         return showtimes;
     }
 
-    // Getter for seats
+    // Getter for seat
     public List<Seat> getSeats() {
         return seats;
     }
