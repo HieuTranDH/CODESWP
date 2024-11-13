@@ -225,7 +225,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
             request.setAttribute("errorMessage", "Đặt vé không thành công. Vui lòng thử lại.");
             request.getRequestDispatcher("error.jsp").forward(request, response);
         } else {
-            // Lưu dữ liệu vào session
+            // Lưu dữ liệu của vé vào session
             session.setAttribute("ticketId", ticketId);
             session.setAttribute("totalPrice", totalPrice);
             System.out.println("Redirecting to PaymentServlet...");
