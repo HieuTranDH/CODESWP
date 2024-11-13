@@ -56,7 +56,7 @@ public class ScreeningRoom {
                 .orElse(null);
     }
 
-    // Getters and Setters
+    // Getter and Setter
     public int getRoomId() {
         return roomId;
     }
