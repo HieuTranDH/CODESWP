@@ -78,6 +78,9 @@ public class Customer_buyTicket extends HttpServlet {
         request.setAttribute("promotions", promotions); // Thêm danh sách khuyến mãi vào request
         request.setAttribute("showtimeId", showtimeIdParam);
 
+        RequestDispatcher dispatcher = request.getRequestDispatcher("test.jsp"); // Thay đổi tên tệp JSP theo nhu cầu
+        dispatcher.forward(request, response);
+        session.removeAttribute("errorMessage");
     }
 
 
