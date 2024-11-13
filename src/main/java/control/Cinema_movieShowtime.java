@@ -19,10 +19,7 @@ import model.DAO.Cinema_DB;
 import model.Movie;
 import model.MovieShowtime;
 
-/**
- *
- * @author ThanhDuoc
- */
+
 @WebServlet(name = "Cinema_movieShowtime", urlPatterns = {"/cinema"})
 public class Cinema_movieShowtime extends HttpServlet {
 
