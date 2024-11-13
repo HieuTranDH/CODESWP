@@ -24,23 +24,11 @@ import model.DAO.Movie_DB;
 import model.DAO.Staff_DB;
 import model.Movie;
 
-/**
- *
- * @author PC
- */
+
 @MultipartConfig(maxFileSize = 1024 * 1024 * 10) // 10 MB
 @WebServlet(name = "Admin_movieManagement", urlPatterns = {"/staff/movieManagement"})
 public class Admin_movieManagement extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
