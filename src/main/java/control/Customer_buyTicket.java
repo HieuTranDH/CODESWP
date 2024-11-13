@@ -124,7 +124,7 @@ public class Customer_buyTicket extends HttpServlet {
         RequestDispatcher dispatcher = request.getRequestDispatcher("test.jsp"); // Thay đổi tên tệp JSP theo nhu cầu
         dispatcher.forward(request, response);
 
-        // Xóa thông báo lỗi khỏi session sau khi xử lý
+        // Xóa thông báo lỗi khỏi session sau  xử lý
         session.removeAttribute("errorMessage");
     }
 
