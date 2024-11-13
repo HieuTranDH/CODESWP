@@ -50,7 +50,14 @@ public class Admin_Promotion extends HttpServlet {
             case "editdiscount":
                 try {
                     //pro
-                    
+                    int promotionId = Integer.parseInt(request.getParameter("discountId"));
+                    String promotionCode = request.getParameter("DiscountCodeInput");
+                    String promotionDescription = request.getParameter("DescriptionInput");
+                    double maxDiscountAmount = Double.parseDouble(request.getParameter("ConditionInput"));
+                    double discountPercentage = Double.parseDouble(request.getParameter("DiscountPercentInput"));
+                    int minTicketQuantity = Integer.parseInt(request.getParameter("UsageLimitInput"));
+                    int maxTicketQuantity = Integer.parseInt(request.getParameter("UsageCountInput"));
+                    String validFromStr = request.getParameter("ValidFromInput");
                     //pro
                     String validToStr = request.getParameter("ValidToInput");
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
