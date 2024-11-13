@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package control;
 
 import com.vnpay.common.ajaxServlet;
@@ -77,17 +73,13 @@ public class Customer_buyTicket extends HttpServlet {
             request.setAttribute("errorMessage", "Showtime ID là bắt buộc.");
         }
 
-        // Đưa thông tin ghế, combo và khuyến mãi vào request
         request.setAttribute("seats", seats);
         request.setAttribute("combos", combos);  // Thêm danh sách combo vào request
         request.setAttribute("promotions", promotions); // Thêm danh sách khuyến mãi vào request
         request.setAttribute("showtimeId", showtimeIdParam);
 
-        // Chuyển tiếp tới JSP để hiển thị thông tin ghế, combo và khuyến mãi
         RequestDispatcher dispatcher = request.getRequestDispatcher("test.jsp"); // Thay đổi tên tệp JSP theo nhu cầu
         dispatcher.forward(request, response);
-
-        // Xóa thông báo lỗi khỏi session sau khi xử lý
         session.removeAttribute("errorMessage");
     }
 

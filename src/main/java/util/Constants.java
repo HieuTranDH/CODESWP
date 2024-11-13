@@ -4,15 +4,11 @@
  */
 package util;
 
-/**
- *
- * @author Admin
- */
 public class Constants {
 
-    public static String GOOGLE_CLIENT_ID = "148005449596-iqm7sbe0ljtc3n1i4hj9vns1oeuk7eif.apps.googleusercontent.com";
 
     public static String GOOGLE_CLIENT_SECRET = "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";
+    public static String GOOGLE_CLIENT_ID = "148005449596-iqm7sbe0ljtc3n1i4hj9vns1oeuk7eif.apps.googleusercontent.com";
 
     public static String GOOGLE_REDIRECT_URI = "http://localhost:8080/FCM/login";
 

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package control;
 
 import jakarta.servlet.annotation.WebServlet;
@@ -71,11 +67,9 @@ public class Admin_movieManagement extends HttpServlet {
                 createMovie(request, response);
                 break;
             case "update":
-                // Xử lý cập nhật phim ở đây
                 editMovie(request, response);
                 break;
             case "delete":
-                // Xử lý xóa phim ở đây
                 deleteMovie(request, response);
                 break;
             default:
@@ -209,7 +203,19 @@ public class Admin_movieManagement extends HttpServlet {
     }
 
     private void deleteMovie(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // Logic xóa phim
+        int movieId = Integer.parseInt(request.getParameter("movieId"));
+
+        boolean isDeleted = Staff_DB.deleteMovie(movieId);
+
+        // Kiểm tra kết quả và thiết lập thông báo tương ứng
+        if (isDeleted) {
+            request.getSession().setAttribute("msg", "Xóa bộ phim thành công!");
+        } else {
+            request.getSession().setAttribute("msg", "Xóa bộ phim thất bại!");
+        }
+
+        // Redirect về trang quản lý phim
+        response.sendRedirect(request.getContextPath() + "/staff/movieManagement");
     }
 
 

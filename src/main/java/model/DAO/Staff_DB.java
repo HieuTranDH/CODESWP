@@ -557,5 +557,24 @@ public static boolean cancelStaff(int staffId) {
 
     return ticket;
 }
-  
+
+    public static boolean deleteMovie(int movieId) {
+        String query = "DELETE FROM Movie WHERE movie_id = ?";
+        boolean isDeleted = false;
+
+        try (Connection con = DriverManager.getConnection(dbURL, dbUser, dbPass);
+             PreparedStatement pstmt = con.prepareStatement(query)) {
+
+            pstmt.setInt(1, movieId);
+
+            int rowsAffected = pstmt.executeUpdate();
+            if (rowsAffected > 0) {
+                isDeleted = true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Staff_DB.class.getName()).log(Level.SEVERE, "Error deleting movie with ID: " + movieId, ex);
+        }
+
+        return isDeleted;
+    }
 }
