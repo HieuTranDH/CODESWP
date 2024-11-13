@@ -7,7 +7,14 @@ rows.forEach(rowLetter => {
     seatRow.classList.add('seat-row');
     seatRow.dataset.row = rowLetter;
 
-
+    let seatType = '';
+    if (rowLetter >= 'A' && rowLetter <= 'E') {
+        seatType = 'standard'; // Ghế thường
+    } else if (rowLetter >= 'F' && rowLetter <= 'H') {
+        seatType = 'vip'; // Ghế VIP
+    } else if (rowLetter === 'I') {
+        seatType = 'couple'; // Ghế đôi
+    }
 
     for (let i = 1; i <= seatsPerRow; i++) {
         const seat = document.createElement('div');
