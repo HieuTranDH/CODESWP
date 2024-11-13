@@ -17,23 +17,6 @@ import model.Promotion;
 
 public class Admin_Promotion extends HttpServlet {
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet Admin_Promotion</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet Admin_Promotion at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -104,14 +87,12 @@ public class Admin_Promotion extends HttpServlet {
 
                     pdb.addPromotion(promotion);
 
-                    // Forward the request to the shop page
                     session.setAttribute("message", "Add Success.");
                     response.sendRedirect("promotion");
 
                 } catch (ParseException | IOException | NumberFormatException e) {
                     e.printStackTrace();
                 }
-            // Print the error (ideally, handle it properly)
                 break;
 
             case "deletepromotion":
@@ -121,16 +102,12 @@ public class Admin_Promotion extends HttpServlet {
 
                 pdb.updatePromotion(promotion);
 
-                // Chuyển hướng sau khi cập nhật thành công
                 session.setAttribute("message", "Delete Success.");
                 response.sendRedirect("promotion");
                 break;
         }
     }
 
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+
 
 }
