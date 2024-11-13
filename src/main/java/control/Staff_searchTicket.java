@@ -109,7 +109,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
         response.getWriter().write("{\"error\":\"Invalid ticket ID format\"}");
     } catch (JSONException e) {
         response.getWriter().write("{\"error\":\"JSON error occurred\"}");
-    } catch (Exception e) {
+    } catch (IOException e) {
         response.getWriter().write("{\"error\":\"An error occurred\"}");
     }
 }
