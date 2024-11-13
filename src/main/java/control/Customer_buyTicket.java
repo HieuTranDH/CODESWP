@@ -204,7 +204,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
         System.out.println("Seats available: " + allSeatsAvailable);
 
         if (!allSeatsAvailable) {
-            // Nếu một hoặc nhiều ghế đã được đặt, hiển thị thông báo lỗi và dừng quá trình
+            // Nếu một hoặc nhiều ghế đã được đặt, hiển thị thông báo lỗi và dừng quá trình đặt 
             System.out.println("Error: One or more seats are already booked.");
             session.setAttribute("errorMessage", "Một hoặc nhiều ghế đã được đặt. Vui lòng chọn lại ghế khác.");
             response.sendRedirect(request.getContextPath() + "/buyticket?showtimeId=" + showtimeId);
