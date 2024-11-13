@@ -73,11 +73,7 @@ public class Customer_searchMovie extends HttpServlet {
             Movie movie = movies.get(0);
 //            response.sendRedirect(request.getContextPath() + "/movieDetails.jsp?movieId=" + movie.getMovieId());
              response.getWriter().write(new Gson().toJson(movies));
-        } else if (movies.isEmpty()) {
-            // Nếu không tìm thấy phim nào, trả về thông báo "Not Found"
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.getWriter().write("[]");  // Trả về một mảng rỗng nếu không có phim nào
+        
         } else {
             // Nếu có nhiều kết quả, trả về danh sách phim dưới dạng JSON
             response.setContentType("application/json");
