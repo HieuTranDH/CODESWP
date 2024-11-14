@@ -178,7 +178,13 @@ public class Admin_registerStaffAcount extends HttpServlet {
         
         String msg;
 
-     
+      // Check if the staff exists
+        if (existingStaff == null) {
+            msg = "Nhân viên không tồn tại.";
+            session.setAttribute("msg", msg);
+            response.sendRedirect(request.getContextPath() + "/staff/registerStaffAcount");
+            return;
+        }
 
         Staff staff = new Staff(staffId, userName, email, phoneNumber, cinemaId,status);
 
