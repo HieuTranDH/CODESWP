@@ -156,7 +156,7 @@ public class Movie_DB implements DBinfo {
                 String poster = rs.getString("poster");
                 double averageRating = rs.getDouble("average_rating");
 
-            
+            // Tạo đối tượng Movie với tất cả thông tin
                 topRatedMovie = new Movie(movieId, title, duration, genre, releaseDate, description, status, poster, averageRating);
             }
 
