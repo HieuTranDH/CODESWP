@@ -200,7 +200,7 @@ public class Movie_DB implements DBinfo {
                 int movieId = rs.getInt("movie_id");
                 double averageRating = calculateAverageRating(movieId); // Sử dụng hàm đã tạo ở trên
 
-           
+           // Cập nhật điểm trung bình vào bảng Movie
                 updateStmt.setDouble(1, averageRating);
                 updateStmt.setInt(2, movieId);
                 updateStmt.executeUpdate();
