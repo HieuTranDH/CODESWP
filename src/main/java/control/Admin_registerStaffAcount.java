@@ -117,7 +117,13 @@ public class Admin_registerStaffAcount extends HttpServlet {
                 break;
             }
         }
-        
+  // Check if the username already exists
+        for (Staff staff : staffList) {
+            if (staff.getName().equals(userName)) {
+                checkUsername = false;
+                break;
+            }
+        }
 
         
 
