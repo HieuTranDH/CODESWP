@@ -42,7 +42,7 @@ public class Customer_buyTicket extends HttpServlet {
         List<Promotion> promotions = new ArrayList<>(); // Danh sách khuyến mãi
         HttpSession session = request.getSession();
 
-        // Xóa các thuộc tính liên quan trong session nếu có
+        // Xóa các thuộc tính liên quan trong session nếu có tồn 
         session.removeAttribute("ticketId");
         session.removeAttribute("totalPrice");
 
@@ -78,8 +78,12 @@ public class Customer_buyTicket extends HttpServlet {
         request.setAttribute("promotions", promotions); // Thêm danh sách khuyến mãi vào request
         request.setAttribute("showtimeId", showtimeIdParam);
 
+        // Chuyển tiếp tới JSP để hiển thị thông tin ghế, combo và khuyến mãii
         RequestDispatcher dispatcher = request.getRequestDispatcher("test.jsp"); // Thay đổi tên tệp JSP theo nhu cầu
         dispatcher.forward(request, response);
+
+        // Xóa thông báo lỗi khỏi session sau  xử lý
+
         session.removeAttribute("errorMessage");
     }
 
