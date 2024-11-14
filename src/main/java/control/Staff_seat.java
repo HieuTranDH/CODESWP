@@ -119,7 +119,7 @@ public class Staff_seat extends HttpServlet {
             }
         }
 
-        // Quay lại trang JSP sau khi xử lý
+        
         response.sendRedirect("seat?value=" + roomId);
     }
 

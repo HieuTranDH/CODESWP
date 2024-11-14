@@ -4,10 +4,7 @@
  */
 package model;
 
-/**
- *
- * @author ThanhDuoc
- */
+
 import java.util.ArrayList;
 import java.util.List;
 

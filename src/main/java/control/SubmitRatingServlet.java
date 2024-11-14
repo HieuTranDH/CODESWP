@@ -21,8 +21,7 @@ import model.DAO.Movie_DB;
  */
 @WebServlet(name = "SubmitRatingServlet", urlPatterns = {"/submitRating"})
 public class SubmitRatingServlet extends HttpServlet {
-
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+       protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Lấy các giá trị từ form
         Customer cus = (Customer) request.getSession().getAttribute("USER");
 
@@ -41,5 +40,6 @@ public class SubmitRatingServlet extends HttpServlet {
             response.sendRedirect("/FCM/profile");
         }
     }
+    
 
 }

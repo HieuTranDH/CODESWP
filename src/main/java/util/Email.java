@@ -23,7 +23,6 @@ public class Email {
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
 
-        // Authenticator
         Authenticator auth = new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
@@ -31,11 +30,9 @@ public class Email {
             }
         };
 
-        // Session
         Session session = Session.getInstance(props, auth);
 
         try {
-            // Compose message
             MimeMessage msg = new MimeMessage(session);
             msg.addHeader("Content-type", "text/HTML; charset=UTF-8");
             msg.setFrom(new InternetAddress(FROM_EMAIL, "Cinema Movie!"));
@@ -44,7 +41,6 @@ public class Email {
             msg.setSentDate(new Date());
             msg.setText("Verification number of you: " + numberToSend, "UTF-8");
 
-            // Send message
             Transport.send(msg);
 
             System.out.println("Email sent successfully!");

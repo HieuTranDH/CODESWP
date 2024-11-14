@@ -26,10 +26,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-/**
- *
- * @author CTT VNPAY
- */
+
 @WebServlet(name = "ajaxServlet", urlPatterns = {"/payment/vnpayajax"})
 
 public class ajaxServlet extends HttpServlet {
@@ -43,9 +40,9 @@ public class ajaxServlet extends HttpServlet {
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String orderType = "other";
-        long amount = (long) (totalPrice * 100); // Đảm bảo totalPrice là giá trị Double
+        long amount = (long) (totalPrice * 100);
         String bankCode = "";
-        String vnp_TxnRef = ticketId.toString(); // Chuyển ticketId thành chuỗi
+        String vnp_TxnRef = ticketId.toString();
         String vnp_IpAddr = Config.getIpAddress(req);
         String vnp_TmnCode = Config.vnp_TmnCode;
 

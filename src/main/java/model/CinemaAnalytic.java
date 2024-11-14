@@ -4,10 +4,7 @@
  */
 package model;
 
-/**
- *
- * @author Admin
- */
+
 public class CinemaAnalytic {
     private int cinemaId;          // ID của rạp chiếu
     private String name;           // Tên của rạp chiếu
@@ -39,8 +36,6 @@ public class CinemaAnalytic {
     public void setName(String name) {
         this.name = name;
     }
-
-    // Getter và Setter cho numberOfTicket
     public int getNumberOfTicket() {
         return numberOfTicket;
     }
