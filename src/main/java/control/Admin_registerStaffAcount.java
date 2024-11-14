@@ -110,6 +110,7 @@ public class Admin_registerStaffAcount extends HttpServlet {
         List<Staff> staffList = staffDB.getAllStaff(); // Retrieve the list of staff
         boolean checkEmail = true;
         boolean checkUsername = true;
+        
 // Check if the email already exists
         for (Staff staff : staffList) {
             if (staff.getEmail().equals(email)) {
@@ -128,6 +129,38 @@ public class Admin_registerStaffAcount extends HttpServlet {
         
 
         String msg;
+// Check if password and confirmation match
+        if (!password.equals(confirmPassword)) {
+            msg = "Mật khẩu xác nhận không khớp. Error";
+            session.setAttribute("msg", msg);
+            response.sendRedirect(request.getContextPath() + "/staff/registerStaffAcount");
+        } else {
+            // Check if the email or username is already in use
+            if (!checkEmail) {
+                msg = "Email này đã tồn tại. Error";
+                session.setAttribute("msg", msg);
+                response.sendRedirect(request.getContextPath() + "/staff/registerStaffAcount");
+            } else if (!checkUsername) {
+                msg = "Tên người dùng này đã tồn tại. Error";
+                session.setAttribute("msg", msg);
+                response.sendRedirect(request.getContextPath() + "/staff/registerStaffAcount");
+            } else {
+                // If email and username are valid, register the new staff
+                String role = "Staff"; // Assign role "Staff"
+                Staff newStaff = new Staff(userName, email, "", password, role);
+                boolean isRegistered = staffDB.addStaff(newStaff); // Assumed method to register staff
+
+                if (isRegistered) {
+                    msg = "Đăng ký Success!";
+                    session.setAttribute("msg", msg);
+                    response.sendRedirect(request.getContextPath() + "/staff/registerStaffAcount");
+                } else {
+                    msg = "Có Error xảy ra trong quá trình đăng ký.";
+                    session.setAttribute("msg", msg);
+                    response.sendRedirect(request.getContextPath() + "/staff/registerStaffAcount");
+                }
+            }
+        }
 
         
     }
