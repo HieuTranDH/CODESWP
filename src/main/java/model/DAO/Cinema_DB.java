@@ -535,6 +535,34 @@ public static List<Cinema> getAvailableCinemas() {
         // Nếu không tìm thấy cinema, trả về null
         return null;
     }
+// Hàm cập nhật thông tin Cinema
+    public boolean updateCinema(Cinema cinema) {
+        // Câu truy vấn SQL để cập nhật thông tin rạp chiếu
+        String query = "UPDATE Cinema SET name = ?, address = ?, phone_number = ?, email = ?, status = ? WHERE cinema_id = ?";
+
+        try (Connection con = DriverManager.getConnection(DBinfo.dbURL, DBinfo.dbUser, DBinfo.dbPass); PreparedStatement pstmt = con.prepareStatement(query)) {
+
+            // Thiết lập giá trị cho các cột cần cập nhật
+            pstmt.setString(1, cinema.getName());
+            pstmt.setString(2, cinema.getAddress());
+            pstmt.setString(3, cinema.getPhoneNumber());
+            pstmt.setString(4, cinema.getEmail());
+            pstmt.setString(5, cinema.getStatus());
+            pstmt.setInt(6, cinema.getCinemaId());
+
+            // Thực thi câu lệnh update
+            int rowsUpdated = pstmt.executeUpdate();
+
+            // Nếu số dòng được cập nhật lớn hơn 0, nghĩa là cập nhật thành công
+            return rowsUpdated > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // Trả về false nếu việc cập nhật thất bại
+        return false;
+    }
 
     
 
