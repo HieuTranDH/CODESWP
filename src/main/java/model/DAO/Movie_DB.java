@@ -69,7 +69,7 @@ public class Movie_DB implements DBinfo {
         List<Movie> recentMovies = new ArrayList<>();
 
         try (Connection con = DriverManager.getConnection(dbURL, dbUser, dbPass); PreparedStatement pstmt = con.prepareStatement(query); ResultSet rs = pstmt.executeQuery()) {
-
+// Lấy từng giá trị từ ResultSet
             while (rs.next()) {
              
                 int movieId = rs.getInt("movie_id");
