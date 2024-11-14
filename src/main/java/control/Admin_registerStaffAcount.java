@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
+
 package control;
 
 import jakarta.servlet.annotation.WebServlet;
@@ -20,10 +17,7 @@ import model.DAO.Cinema_DB;
 import model.DAO.Staff_DB;
 import model.Staff;
 
-/**
- *
- * @author PC
- */
+
 @WebServlet(name = "Admin_RegisterStaffAcount", urlPatterns = {"/staff/registerStaffAcount"})
 public class Admin_registerStaffAcount extends HttpServlet {
 
@@ -117,56 +111,13 @@ public class Admin_registerStaffAcount extends HttpServlet {
         boolean checkEmail = true;
         boolean checkUsername = true;
 
-        // Check if the email already exists
-        for (Staff staff : staffList) {
-            if (staff.getEmail().equals(email)) {
-                checkEmail = false;
-                break;
-            }
-        }
+        
 
-        // Check if the username already exists
-        for (Staff staff : staffList) {
-            if (staff.getName().equals(userName)) {
-                checkUsername = false;
-                break;
-            }
-        }
+        
 
         String msg;
 
-        // Check if password and confirmation match
-        if (!password.equals(confirmPassword)) {
-            msg = "Mật khẩu xác nhận không khớp. Error";
-            session.setAttribute("msg", msg);
-            response.sendRedirect(request.getContextPath() + "/staff/registerStaffAcount");
-        } else {
-            // Check if the email or username is already in use
-            if (!checkEmail) {
-                msg = "Email này đã tồn tại. Error";
-                session.setAttribute("msg", msg);
-                response.sendRedirect(request.getContextPath() + "/staff/registerStaffAcount");
-            } else if (!checkUsername) {
-                msg = "Tên người dùng này đã tồn tại. Error";
-                session.setAttribute("msg", msg);
-                response.sendRedirect(request.getContextPath() + "/staff/registerStaffAcount");
-            } else {
-                // If email and username are valid, register the new staff
-                String role = "Staff"; // Assign role "Staff"
-                Staff newStaff = new Staff(userName, email, "", password, role);
-                boolean isRegistered = staffDB.addStaff(newStaff); // Assumed method to register staff
-
-                if (isRegistered) {
-                    msg = "Đăng ký Success!";
-                    session.setAttribute("msg", msg);
-                    response.sendRedirect(request.getContextPath() + "/staff/registerStaffAcount");
-                } else {
-                    msg = "Có Error xảy ra trong quá trình đăng ký.";
-                    session.setAttribute("msg", msg);
-                    response.sendRedirect(request.getContextPath() + "/staff/registerStaffAcount");
-                }
-            }
-        }
+        
     }
 
     private void handleStaffUpdate(HttpServletRequest request, HttpServletResponse response, HttpSession session)
@@ -182,13 +133,7 @@ public class Admin_registerStaffAcount extends HttpServlet {
         
         String msg;
 
-        // Check if the staff exists
-        if (existingStaff == null) {
-            msg = "Nhân viên không tồn tại.";
-            session.setAttribute("msg", msg);
-            response.sendRedirect(request.getContextPath() + "/staff/registerStaffAcount");
-            return;
-        }
+     
 
         Staff staff = new Staff(staffId, userName, email, phoneNumber, cinemaId,status);
 

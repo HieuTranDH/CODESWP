@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
+
 package control;
 
 import java.io.IOException;
@@ -18,7 +15,7 @@ import model.Staff;
 
 /**
  *
- * @author Admin
+ * @author KAILEGION
  */
 public class Admin_ListCinema extends HttpServlet {
 
@@ -85,18 +82,7 @@ public class Admin_ListCinema extends HttpServlet {
             String phone = request.getParameter("cinemaPhone");
             String email = request.getParameter("cinemaEmail");
 
-            // Gọi phương thức addCinema để thêm cinema vào database
-            boolean success = cdb.addCinema(name, address, phone, email);
-
-            if (success) {
-                session.setAttribute("message", "Add Success.");
-                // Nếu thêm thành công, chuyển hướng về trang danh sách cinema hoặc trang khác
-                response.sendRedirect(request.getContextPath() + "/staff/listcinema");
-            } else {
-                // Nếu có lỗi, thông báo lỗi và quay về trang form
-                request.setAttribute("message", "Error adding cinema. Please try again.");
-                response.sendRedirect(request.getContextPath() + "/staff/listcinema");
-            }
+ 
         } else if (action.equals("edit")) {
             String id = request.getParameter("cinemaID");
             String name = request.getParameter("cinemaName");
@@ -110,15 +96,7 @@ public class Admin_ListCinema extends HttpServlet {
             c.setPhoneNumber(phone);
             c.setEmail(email);
             boolean ed = cdb.updateCinema(c);
-            if (ed) {
-                session.setAttribute("message", "Edit Success.");
-                // Nếu thêm thành công, chuyển hướng về trang danh sách cinema hoặc trang khác
-                response.sendRedirect(request.getContextPath() + "/staff/listcinema");
-            } else {
-                // Nếu có lỗi, thông báo lỗi và quay về trang form
-                request.setAttribute("message", "Error editing cinema. Please try again.");
-                response.sendRedirect(request.getContextPath() + "/staff/listcinema");
-            }
+         
         } else if (action.equals("deletecinema")) {
             int id = Integer.parseInt(request.getParameter("cinemaId"));
             Cinema c = cdb.getCinemaById(id);

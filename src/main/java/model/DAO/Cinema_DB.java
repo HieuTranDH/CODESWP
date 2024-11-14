@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package model.DAO;
 
 import java.math.BigDecimal;
@@ -28,10 +25,7 @@ import model.Seat;
 import model.Showtime;
 import model.Staff;
 
-/**
- *
- * @author ThanhDuoc
- */
+
 public class Cinema_DB {
 
     public Cinema_DB() {

@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
+
 package control;
 
 import jakarta.servlet.annotation.WebServlet;
@@ -24,10 +21,7 @@ import model.DAO.Movie_DB;
 import model.DAO.Staff_DB;
 import model.Movie;
 
-/**
- *
- * @author PC
- */
+
 @MultipartConfig(maxFileSize = 1024 * 1024 * 10) // 10 MB
 @WebServlet(name = "Admin_movieManagement", urlPatterns = {"/staff/movieManagement"})
 public class Admin_movieManagement extends HttpServlet {
@@ -188,17 +182,6 @@ public class Admin_movieManagement extends HttpServlet {
         String releaseDateStr = request.getParameter("releaseDate");
         String description = request.getParameter("description");
 
-// Định dạng ngày tháng từ form
-        SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat targetFormat = new SimpleDateFormat("yyyy/MM/dd");
-
-        String formattedReleaseDate = releaseDateStr;
-        try {
-            java.util.Date date = originalFormat.parse(releaseDateStr);
-            formattedReleaseDate = targetFormat.format(date);
-        } catch (ParseException e) {
-            Logger.getLogger(Admin_movieManagement.class.getName()).log(Level.SEVERE, "Error formatting release date", e);
-        }
 
 // Xử lý file ảnh poster
         Part filePart = request.getPart("poster");
@@ -231,15 +214,8 @@ public class Admin_movieManagement extends HttpServlet {
         // Gọi phương thức updateMovie từ DAO/service để cập nhật phim
         boolean isUpdated = Staff_DB.updateMovie(movie);
 
-        // Kiểm tra xem quá trình cập nhật có thành công không
-        if (isUpdated) {
-            // Nếu cập nhật thành công, chuyển hướng về trang quản lý phim
-            request.getSession().setAttribute("msg", "Update bộ phim Success!");
-        } else {
-            // Nếu thất bại, chuyển hướng với thông báo lỗi
-            request.getSession().setAttribute("msg", "Update bộ phim thất bại!");
-        }
-        response.sendRedirect(request.getContextPath() + "/staff/movieManagement");
+    
+       
     }
 
     private void deleteMovie(HttpServletRequest request, HttpServletResponse response) throws IOException {
