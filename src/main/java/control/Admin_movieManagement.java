@@ -223,6 +223,15 @@ SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         // Gọi phương thức updateMovie từ DAO/service để cập nhật phim
         boolean isUpdated = Staff_DB.updateMovie(movie);
+// Gọi phương thức updateMovie từ DAO/service để cập nhật phim   :
+  if (isUpdated) {
+            // Nếu cập nhật thành công, chuyển hướng về trang quản lý phim
+            request.getSession().setAttribute("msg", "Update bộ phim Success!");
+        } else {
+            // Nếu thất bại, chuyển hướng với thông báo lỗi
+            request.getSession().setAttribute("msg", "Update bộ phim thất bại!");
+        }
+        response.sendRedirect(request.getContextPath() + "/staff/movieManagement");
 
     
        
