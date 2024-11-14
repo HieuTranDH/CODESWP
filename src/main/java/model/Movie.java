@@ -35,6 +35,17 @@ public class Movie {
         this.poster = poster;
         this.averageRating = averageRating;
     }
+    public Movie(int movieId, String title, int duration, String genre, String releaseDate, String description, String status, String poster, double averageRating) {
+        this.movieId = movieId;
+        this.title = title;
+        this.duration = duration;
+        this.genre = genre;
+        this.releaseDate = releaseDate;
+        this.description = description;
+        this.status = status;
+        this.poster = poster;
+        this.averageRating = averageRating;
+    }
 
     public double getAverageRating() {
         return averageRating;
