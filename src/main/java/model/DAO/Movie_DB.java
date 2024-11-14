@@ -224,7 +224,7 @@ public class Movie_DB implements DBinfo {
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
-                  
+            // Lấy các thông tin của đánh giá từ cơ sở dữ liệu
                     int ratingId = rs.getInt("rating_id");
                     int customerId = rs.getInt("customer_id");
                     String customerName = rs.getString("customer_name"); // Lấy tên từ bảng Customer
