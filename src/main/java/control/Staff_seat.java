@@ -15,11 +15,6 @@ import model.DAO.ScreeningRoom_DB;
 import model.DAO.Seat_DB;
 import model.ScreeningRoom;
 import model.Seat;
-
-/**
- *
- * @author Admin
- */
 public class Staff_seat extends HttpServlet {
 
     /**
@@ -35,7 +30,6 @@ public class Staff_seat extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -123,11 +117,6 @@ public class Staff_seat extends HttpServlet {
         response.sendRedirect("seat?value=" + roomId);
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";

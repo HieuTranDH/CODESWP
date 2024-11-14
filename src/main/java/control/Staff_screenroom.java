@@ -16,11 +16,6 @@ import model.DAO.ScreeningRoom_DB;
 import model.DAO.Seat_DB;
 import model.ScreeningRoom;
 import model.Seat;
-
-/**
- *
- * @author Admin
- */
 public class Staff_screenroom extends HttpServlet {
 
     /**
@@ -176,12 +171,6 @@ public class Staff_screenroom extends HttpServlet {
                 break;
         }
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";

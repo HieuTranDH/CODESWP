@@ -48,4 +48,5 @@ public class Cinema_movieShowtime extends HttpServlet {
         request.getRequestDispatcher("/cinema/index.jsp").forward(request, response);
     }
 
+
 }
