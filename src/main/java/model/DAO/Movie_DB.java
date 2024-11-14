@@ -71,7 +71,7 @@ public class Movie_DB implements DBinfo {
         try (Connection con = DriverManager.getConnection(dbURL, dbUser, dbPass); PreparedStatement pstmt = con.prepareStatement(query); ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) {
-                // Lấy từng giá trị từ ResultSet
+             
                 int movieId = rs.getInt("movie_id");
                 String title = rs.getString("title");
                 int duration = rs.getInt("duration");
@@ -156,7 +156,7 @@ public class Movie_DB implements DBinfo {
                 String poster = rs.getString("poster");
                 double averageRating = rs.getDouble("average_rating");
 
-                // Tạo đối tượng Movie với tất cả thông tin
+            
                 topRatedMovie = new Movie(movieId, title, duration, genre, releaseDate, description, status, poster, averageRating);
             }
 
@@ -200,7 +200,7 @@ public class Movie_DB implements DBinfo {
                 int movieId = rs.getInt("movie_id");
                 double averageRating = calculateAverageRating(movieId); // Sử dụng hàm đã tạo ở trên
 
-                // Cập nhật điểm trung bình vào bảng Movie
+           
                 updateStmt.setDouble(1, averageRating);
                 updateStmt.setInt(2, movieId);
                 updateStmt.executeUpdate();
@@ -224,7 +224,7 @@ public class Movie_DB implements DBinfo {
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
-                    // Lấy các thông tin của đánh giá từ cơ sở dữ liệu
+                  
                     int ratingId = rs.getInt("rating_id");
                     int customerId = rs.getInt("customer_id");
                     String customerName = rs.getString("customer_name"); // Lấy tên từ bảng Customer

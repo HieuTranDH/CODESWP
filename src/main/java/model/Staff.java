@@ -79,13 +79,7 @@ public class Staff {
         this.status = status;
     }
 
-    public Staff(String name, String email, String phoneNumber, String password, String role) {
-        this.name = name;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.password = password;
-        this.role = role;
-    }
+ 
 
     public String getStatus() {
         return status;

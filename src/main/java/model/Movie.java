@@ -23,17 +23,7 @@ public class Movie {
     public Movie() {
     }
 
-    public Movie(int movieId, String title, int duration, String genre, String releaseDate, String description, String status, String poster, double averageRating) {
-        this.movieId = movieId;
-        this.title = title;
-        this.duration = duration;
-        this.genre = genre;
-        this.releaseDate = releaseDate;
-        this.description = description;
-        this.status = status;
-        this.poster = poster;
-        this.averageRating = averageRating;
-    }
+
 
     public Movie(String title, int duration, String genre, String releaseDate, String description, String status, String poster,double averageRating) {
         this.title = title;
