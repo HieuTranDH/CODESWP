@@ -11,11 +11,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author Admin
- */
-//dasdsa
+//bat qua tang coi khucthihuong
 public class Admin_Analytics extends HttpServlet {
 
     /**

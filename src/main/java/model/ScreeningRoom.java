@@ -43,7 +43,7 @@ public class ScreeningRoom {
                 .orElse(null);
     }
 
-    // Method to add a seat to the screening room
+    // Method to add a seat to screening room
     public void addSeat(Seat seat) {
         seats.add(seat);
     }
@@ -56,7 +56,7 @@ public class ScreeningRoom {
                 .orElse(null);
     }
 
-    // Getters and Setters
+    // Getter and Setter
     public int getRoomId() {
         return roomId;
     }
@@ -89,12 +89,12 @@ public class ScreeningRoom {
         this.seatCapacity = seatCapacity;
     }
 
-    // Getter for showtimes
+    // Getter for showtime
     public List<Showtime> getShowtimes() {
         return showtimes;
     }
 
-    // Getter for seats
+    // Getter for seat
     public List<Seat> getSeats() {
         return seats;
     }

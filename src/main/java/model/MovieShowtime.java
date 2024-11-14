@@ -18,7 +18,7 @@ public class MovieShowtime {
         this.showtime = showtime;
     }
 
-    // Getters và setters
+    // Getter va setter
     public Movie getMovie() {
         return movie;
     }

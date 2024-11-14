@@ -5,13 +5,13 @@
 <section>
     <style>.card {
             background-color: transparent !important;
-            box-shadow: none; /* Xóa b? bóng n?u không mu?n */
+            box-shadow: none; /* Xï¿½a b? bï¿½ng n?u khï¿½ng mu?n */
         }
         .card:hover {
             transform: scale(1.05);
-        }</style>
+        }
+    </style>
 
-    <!---movie-ticket-book-->
 
     <div class="filter-search-box">
         <div class="filters-box">
@@ -75,12 +75,10 @@
                 } else if (status === 'comingSoon' && movieStatus === 'Coming soon') {
                     movie.style.display = 'block'; // Hi?n th? phim s?p chi?u
                 } else {
-                    movie.style.display = 'none'; // ?n phim không kh?p
+                    movie.style.display = 'none'; // ?n phim khï¿½ng kh?p
                 }
             });
         }
-
-        // Hi?n th? phim "Now Showing" khi t?i trang
         document.addEventListener('DOMContentLoaded', () => {
             filterMovies('nowShowing');
         });

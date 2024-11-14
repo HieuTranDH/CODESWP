@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package control;
 
 import jakarta.servlet.annotation.WebServlet;
@@ -24,23 +20,11 @@ import model.DAO.Movie_DB;
 import model.DAO.Staff_DB;
 import model.Movie;
 
-/**
- *
- * @author PC
- */
+
 @MultipartConfig(maxFileSize = 1024 * 1024 * 10) // 10 MB
 @WebServlet(name = "Admin_movieManagement", urlPatterns = {"/staff/movieManagement"})
 public class Admin_movieManagement extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -58,15 +42,7 @@ public class Admin_movieManagement extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -76,14 +52,7 @@ public class Admin_movieManagement extends HttpServlet {
         request.getRequestDispatcher("/staff/dashboards-movieMn.jsp").forward(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
@@ -98,11 +67,9 @@ public class Admin_movieManagement extends HttpServlet {
                 createMovie(request, response);
                 break;
             case "update":
-                // Xử lý cập nhật phim ở đây
                 editMovie(request, response);
                 break;
             case "delete":
-                // Xử lý xóa phim ở đây
                 deleteMovie(request, response);
                 break;
             default:
@@ -218,42 +185,39 @@ public class Admin_movieManagement extends HttpServlet {
             String fileName = getFileName(filePart);
             filePart.write(uploadFilePath + File.separator + fileName);
 
-            // Cập nhật đường dẫn đến poster mới
             poster = "uploads/" + fileName;
         }
 
-        // Mặc định status là "Coming soon" nếu không được nhập từ form
         String status = request.getParameter("status") != null ? request.getParameter("status") : "Coming soon";
 
-        // Tạo đối tượng Movie từ dữ liệu form
         Movie movie = new Movie(movieId, title, duration, genre, formattedReleaseDate, description, status, poster, 0.00);
 
-        // Gọi phương thức updateMovie từ DAO/service để cập nhật phim
         boolean isUpdated = Staff_DB.updateMovie(movie);
 
-        // Kiểm tra xem quá trình cập nhật có thành công không
-        if (isUpdated) {
-            // Nếu cập nhật thành công, chuyển hướng về trang quản lý phim
-            request.getSession().setAttribute("msg", "Update bộ phim Success!");
+        if (isUpdated == true) {
+            request.getSession().setAttribute("msg", "Update bộ phim thành công!");
         } else {
-            // Nếu thất bại, chuyển hướng với thông báo lỗi
             request.getSession().setAttribute("msg", "Update bộ phim thất bại!");
         }
         response.sendRedirect(request.getContextPath() + "/staff/movieManagement");
     }
 
     private void deleteMovie(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // Logic xóa phim
+        int movieId = Integer.parseInt(request.getParameter("movieId"));
+
+        boolean isDeleted = Staff_DB.deleteMovie(movieId);
+
+        // Kiểm tra kết quả và thiết lập thông báo tương ứng
+        if (isDeleted) {
+            request.getSession().setAttribute("msg", "Xóa bộ phim thành công!");
+        } else {
+            request.getSession().setAttribute("msg", "Xóa bộ phim thất bại!");
+        }
+
+        // Redirect về trang quản lý phim
+        response.sendRedirect(request.getContextPath() + "/staff/movieManagement");
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+
 
 }

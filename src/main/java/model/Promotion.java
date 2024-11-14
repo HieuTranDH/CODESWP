@@ -39,6 +39,8 @@ public class Promotion {
         this.status = status;
     }
 
+    //import promotion
+     
     public int getPromotionId() {
         return promotionId;
     }

@@ -196,7 +196,9 @@
                                                 <span style="color: orange;">Coming Soon</span>
                                             </c:when>
                                             <c:otherwise>
-                                                <span>${movie.status}</span> <!-- N?u không ph?i là 'Active' ho?c 'Comingsoon' thì hi?n th? tr?ng thái g?c -->
+
+
+                                                <span>${movie.status}</span> <!-- Nếu không phải là 'Active' ho?c 'Comingsoon' thì hi?n th? tr?ng thái g?c -->
                                             </c:otherwise>
                                         </c:choose>
                                     </i>
