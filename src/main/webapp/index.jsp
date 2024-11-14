@@ -5,7 +5,7 @@
 <section>
     <style>.card {
             background-color: transparent !important;
-            box-shadow: none; /* Xóa b? bóng n?u không mu?n */
+            box-shadow: none; /* xóa bóng n?u không mu?n */
         }
         .card:hover {
             transform: scale(1.05);
