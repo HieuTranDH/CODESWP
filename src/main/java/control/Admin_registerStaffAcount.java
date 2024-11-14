@@ -110,7 +110,13 @@ public class Admin_registerStaffAcount extends HttpServlet {
         List<Staff> staffList = staffDB.getAllStaff(); // Retrieve the list of staff
         boolean checkEmail = true;
         boolean checkUsername = true;
-
+// Check if the email already exists
+        for (Staff staff : staffList) {
+            if (staff.getEmail().equals(email)) {
+                checkEmail = false;
+                break;
+            }
+        }
         
 
         
