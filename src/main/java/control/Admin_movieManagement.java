@@ -181,7 +181,17 @@ public class Admin_movieManagement extends HttpServlet {
         String genre = request.getParameter("genre");
         String releaseDateStr = request.getParameter("releaseDate");
         String description = request.getParameter("description");
+//thêm định dạng ngày tháng cho movie
+SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat targetFormat = new SimpleDateFormat("yyyy/MM/dd");
 
+        String formattedReleaseDate = releaseDateStr;
+        try {
+            java.util.Date date = originalFormat.parse(releaseDateStr);
+            formattedReleaseDate = targetFormat.format(date);
+        } catch (ParseException e) {
+            Logger.getLogger(Admin_movieManagement.class.getName()).log(Level.SEVERE, "Error formatting release date", e);
+        }
 
 // Xử lý file ảnh poster
         Part filePart = request.getPart("poster");
