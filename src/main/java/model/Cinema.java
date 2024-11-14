@@ -27,14 +27,6 @@ public class Cinema {
         this.email = email;
     }
 
-    public Cinema(int cinemaId, String name, String address, String phoneNumber, String email, String status) {
-        this.cinemaId = cinemaId;
-        this.name = name;
-        this.address = address;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.status = status;
-    }
 
     // Getters và Setters
     public int getCinemaId() {
