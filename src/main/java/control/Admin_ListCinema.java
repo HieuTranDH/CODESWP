@@ -109,7 +109,17 @@ public class Admin_ListCinema extends HttpServlet {
             c.setPhoneNumber(phone);
             c.setEmail(email);
             boolean ed = cdb.updateCinema(c);
-         
+         //check add success or fail 
+          if (ed) {
+                session.setAttribute("message", "Edit Success.");
+                // Nếu thêm thành công, chuyển hướng về trang danh sách cinema hoặc trang khác
+                response.sendRedirect(request.getContextPath() + "/staff/listcinema");
+            } else {
+                // Nếu có lỗi, thông báo lỗi và quay về trang form
+                request.setAttribute("message", "Error editing cinema. Please try again.");
+                response.sendRedirect(request.getContextPath() + "/staff/listcinema");
+            }
+
         } else if (action.equals("deletecinema")) {
             int id = Integer.parseInt(request.getParameter("cinemaId"));
             Cinema c = cdb.getCinemaById(id);
