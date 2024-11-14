@@ -81,6 +81,19 @@ public class Admin_ListCinema extends HttpServlet {
             String address = request.getParameter("cinemaAddress");
             String phone = request.getParameter("cinemaPhone");
             String email = request.getParameter("cinemaEmail");
+// Gọi phương thức addCinema để thêm cinema vào database
+
+  boolean success = cdb.addCinema(name, address, phone, email);
+
+            if (success) {
+                session.setAttribute("message", "Add Success.");
+                // Nếu thêm thành công, chuyển hướng về trang danh sách cinema hoặc trang khác
+                response.sendRedirect(request.getContextPath() + "/staff/listcinema");
+            } else {
+                // Nếu có lỗi, thông báo lỗi và quay về trang form
+                request.setAttribute("message", "Error adding cinema. Please try again.");
+                response.sendRedirect(request.getContextPath() + "/staff/listcinema");
+            }
 
  
         } else if (action.equals("edit")) {
