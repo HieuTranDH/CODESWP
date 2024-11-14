@@ -19,7 +19,13 @@ public class Cinema {
     public Cinema() {
     }
 
-
+public Cinema(int cinemaId, String name, String address, String phoneNumber, String email) {
+        this.cinemaId = cinemaId;
+        this.name = name;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+    }
 
     // Getters và Setters
     public int getCinemaId() {
